@@ -12,7 +12,6 @@ class LogoutController extends Controller
     $request->user()->token()->revoke();
     $request->user()->token()->delete();
 
-    $response = 'You have successfully logged out!';
-    return response()->json($response, 200);
+    return response()->json("You have successfully logged out!", 200);
   }
 }

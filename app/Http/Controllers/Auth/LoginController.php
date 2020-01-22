@@ -51,12 +51,10 @@ class LoginController extends Controller
         $response = ['token' => $token];
         return response()->json($response, 200);
       } else {
-        $response = "Incorrect password";
-        return response()->json($response, 422);
+        return response()->json("Incorrect password", 422);
       }
     } else {
-      $response = "User does not exist";
-      return response()->json($response, 422);
+      return response()->json("User does not exist", 422);
     }
   }
 }

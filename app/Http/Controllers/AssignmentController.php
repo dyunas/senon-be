@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Assignment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AssignmentController extends Controller
 {
@@ -14,17 +15,7 @@ class AssignmentController extends Controller
    */
   public function index()
   {
-    //
-  }
-
-  /**
-   * Show the form for creating a new resource.
-   *
-   * @return \Illuminate\Http\Response
-   */
-  public function create()
-  {
-    //
+    return Assignment::all();
   }
 
   /**

@@ -21,4 +21,5 @@ Route::post('/login', 'Auth\LoginController@login');
 
 Route::middleware('auth:api')->group(function () {
   Route::post('/logout', 'Auth\LogoutController@logout');
+  Route::get('/assignments', 'AssignmentController@index');
 });
