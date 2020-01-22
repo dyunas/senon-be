@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\User;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -36,5 +39,24 @@ class LoginController extends Controller
   public function __construct()
   {
     $this->middleware('guest')->except('logout');
+  }
+
+  public function login(Request $request)
+  {
+    $user = User::where('email', $request->email)->first();
+
+    if ($user) {
+      if (Hash::check($request->password, $user->password)) {
+        $token = $user->createToken('Laravel Password Grant Client')->accessToken;
+        $response = ['token' => $token];
+        return response()->json($response, 200);
+      } else {
+        $response = "Incorrect password";
+        return response()->json($response, 422);
+      }
+    } else {
+      $response = "User does not exist";
+      return response()->json($response, 422);
+    }
   }
 }
