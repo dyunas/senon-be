@@ -12,9 +12,15 @@ class DatabaseSeeder extends Seeder
   public function run()
   {
     $this->call(UserLevelSeeder::class);
-    $this->call(UsersTableSeeder::class);
-    $this->call(AssignmentSeeder::class);
+    $this->command->info('user levels seeding completed!');
 
-    $this->command->info('Database seeding complete!');
+    $this->call(UsersTableSeeder::class);
+    $this->command->info('users seeding completed!');
+
+    $this->call(StatusListSeeder::class);
+    $this->command->info('status lists seeding completed!');
+
+    $this->call(AssignmentSeeder::class);
+    $this->command->info('Assignments seeding completed!');
   }
 }

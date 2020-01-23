@@ -21,5 +21,11 @@ Route::post('/login', 'Auth\LoginController@login');
 
 Route::middleware('auth:api')->group(function () {
   Route::post('/logout', 'Auth\LogoutController@logout');
-  Route::get('/assignments', 'AssignmentController@index');
 });
+
+// Assignment CRUD routes
+Route::get('/assignments', 'AssignmentController@index');
+Route::post('/assignments', 'AssignmentController@store');
+Route::get('/assignments/{assignment}', 'AssignmentController@show');
+Route::get('/assignments/{assignment}/edit', 'AssignmentController@edit');
+Route::put('/assignments/{assignment}', 'AssignmentController@update');

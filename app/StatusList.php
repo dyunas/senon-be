@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserLevel extends Model
+class StatusList extends Model
 {
   /**
    * The attributes that are not mass assignable.
@@ -20,8 +20,8 @@ class UserLevel extends Model
    */
   public $timestamps = false;
 
-  public function users()
+  public function assignment()
   {
-    return $this->hasMany(User::class);
+    return $this->hasMany(Assignment::class);
   }
 }

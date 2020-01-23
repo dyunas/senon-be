@@ -12,4 +12,9 @@ class Assignment extends Model
    * @var array
    */
   protected $guarded = [];
+
+  public function status_list()
+  {
+    return $this->belongsTo(StatusList::class);
+  }
 }
