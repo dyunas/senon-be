@@ -41,20 +41,37 @@ class LoginController extends Controller
     $this->middleware('guest')->except('logout');
   }
 
+  protected function formValidator($request)
+  {
+    return $request->validate([
+      'email'    => 'required|email',
+      'password' => 'required|string'
+    ]);
+  }
+
+  protected function generateAccessToken($user)
+  {
+    return $user->createToken($user->email . '-' . now())->accessToken;
+  }
+
   public function login(Request $request)
   {
+    $this->formValidator($request);
+
     $user = User::where('email', $request->email)->first();
 
-    if ($user) {
-      if (Hash::check($request->password, $user->password)) {
-        $token = $user->createToken('Laravel Password Grant Client')->accessToken;
-        $response = ['token' => $token];
-        return response()->json($response, 200);
-      } else {
-        return response()->json("Incorrect password", 422);
-      }
-    } else {
-      return response()->json("User does not exist", 422);
+    if (!$user) {
+      return response()->json(["message" => "User does not exist"], 401);
     }
+
+    if (!Hash::check($request->password, $user->password)) {
+      return response()->json(["message" => "Incorrect password"], 401);
+    }
+
+    $token = $this->generateAccessToken($user);
+
+    return response()->json([
+      'token' => $token,
+    ]);
   }
 }

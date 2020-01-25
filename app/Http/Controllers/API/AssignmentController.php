@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Assignment;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +14,7 @@ class AssignmentController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  private function validateRequest($request)
+  private function formValidator($request)
   {
     return $request->validate([
       'date_assigned'  => 'date|nullable',
@@ -30,7 +31,7 @@ class AssignmentController extends Controller
       'date_loss'      => 'required|date',
       'contact_person' => 'required|digits:11',
       'loss_reserve'   => 'required|numeric|between:0,999999999.99',
-      'status'         => 'required|numeric',
+      'status_list_id' => 'required|numeric',
       'remarks'        => 'string|nullable',
       'created_by'     => 'required|string',
       'updated_by'     => 'string|nullable'
@@ -55,9 +56,9 @@ class AssignmentController extends Controller
    */
   public function store(Request $request)
   {
-    $this->validateRequest($request);
+    $this->formValidator($request);
 
-    Assignment::create([
+    $create = Assignment::create([
       'insurer'        => $request->insurer,
       'broker'         => $request->broker,
       'ref_no'         => $request->ref_no,
@@ -71,16 +72,22 @@ class AssignmentController extends Controller
       'date_loss'      => $request->date_loss,
       'contact_person' => $request->contact_person,
       'loss_reserve'   => $request->loss_reserve,
-      'status'         => $request->status,
+      'status_list_id' => $request->status_list_id,
       'remarks'        => $request->remarks,
       'created_by'     => $request->created_by,
     ]);
+
+    if (!$create) {
+      return response()->json(["message" => "Failed to create assignment."], 500);
+    }
+
+    return response()->json(["message" => "Assignment created successfully!"], 201);
   }
 
   /**
    * Display the specified resource.
    *
-   * @param  \App\Assignment  $assignment
+   * @param  int  $id
    * @return \Illuminate\Http\Response
    */
   public function show(Assignment $assignment)
@@ -89,28 +96,17 @@ class AssignmentController extends Controller
   }
 
   /**
-   * Show the form for editing the specified resource.
-   *
-   * @param  \App\Assignment  $assignment
-   * @return \Illuminate\Http\Response
-   */
-  public function edit(Assignment $assignment)
-  {
-    return $assignment->all();
-  }
-
-  /**
    * Update the specified resource in storage.
    *
    * @param  \Illuminate\Http\Request  $request
-   * @param  \App\Assignment  $assignment
+   * @param  int  $id
    * @return \Illuminate\Http\Response
    */
   public function update(Request $request, Assignment $assignment)
   {
-    $this->validateRequest($request);
+    $this->formValidator($request);
 
-    $assignment->update([
+    $update = $assignment->update([
       'date_assigned'  => $request->date_assigned,
       'insurer'        => $request->insurer,
       'broker'         => $request->broker,
@@ -125,20 +121,26 @@ class AssignmentController extends Controller
       'date_loss'      => $request->date_loss,
       'contact_person' => $request->contact_person,
       'loss_reserve'   => $request->loss_reserve,
-      'status'         => $request->status,
+      'status_list_id' => $request->status_list_id,
       'remarks'        => $request->remarks,
       'created_by'     => $request->created_by,
       'updated_by'     => $request->updated_by,
     ]);
+
+    if (!$update) {
+      return response()->json(["message" => "Failed to update assignment."], 500);
+    }
+
+    return response()->json(["message" => "Assignment updated successfully!"], 201);
   }
 
   /**
    * Remove the specified resource from storage.
    *
-   * @param  \App\Assignment  $assignment
+   * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function destroy(Assignment $assignment)
+  public function destroy($id)
   {
     //
   }
