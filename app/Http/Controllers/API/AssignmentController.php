@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Assignment;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\AssignmentCollection;
 
 class AssignmentController extends Controller
 {
@@ -17,7 +18,6 @@ class AssignmentController extends Controller
   private function formValidator($request)
   {
     return $request->validate([
-      'date_assigned'  => 'date|nullable',
       'insurer'        => 'required|string|max:20',
       'broker'         => 'required|string|max:20',
       'ref_no'         => 'required|alpha_dash|max:32',
@@ -34,7 +34,8 @@ class AssignmentController extends Controller
       'status_list_id' => 'required|numeric',
       'remarks'        => 'string|nullable',
       'created_by'     => 'required|string',
-      'updated_by'     => 'string|nullable'
+      'updated_by'     => '',
+      'date_assigned'  => '',
     ]);
   }
 
@@ -45,7 +46,7 @@ class AssignmentController extends Controller
    */
   public function index()
   {
-    return Assignment::all();
+    return AssignmentCollection::collection(Assignment::all());
   }
 
   /**
@@ -92,7 +93,7 @@ class AssignmentController extends Controller
    */
   public function show(Assignment $assignment)
   {
-    return $assignment->all();
+    return AssignmentCollection::collection($assignment->all());
   }
 
   /**
