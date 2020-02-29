@@ -46,7 +46,7 @@ class AssignmentController extends Controller
    */
   public function index()
   {
-    return AssignmentCollection::collection(Assignment::all());
+    return AssignmentCollection::collection(Assignment::orderBy('id', 'desc')->get());
   }
 
   /**
