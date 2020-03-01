@@ -30,7 +30,7 @@ class AssignmentController extends Controller
       'nature_loss'    => 'required|string|max:50',
       'date_loss'      => 'required|date',
       'contact_person' => 'required|digits:11',
-      'loss_reserve'   => 'required|numeric|between:0,999999999.99',
+      'loss_reserve'   => 'required|string',
       'status_list_id' => 'required|numeric',
       'remarks'        => 'string|nullable',
       'created_by'     => 'required|string',
