@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\UserLevel;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class UserLevelController extends Controller
 {
@@ -14,7 +15,7 @@ class UserLevelController extends Controller
    */
   public function index()
   {
-    //
+    return UserLevel::all();
   }
 
   /**
