@@ -73,7 +73,7 @@ class AssignmentController extends Controller
       'date_loss'      => $request->date_loss,
       'contact_person' => $request->contact_person,
       'loss_reserve'   => $request->loss_reserve,
-      'status_list_id' => $request->status_list_id,
+      'status_list_id' => 1,
       'remarks'        => $request->remarks,
       'created_by'     => $request->created_by,
     ]);
