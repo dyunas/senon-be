@@ -28,7 +28,7 @@ class CreateAssignmentsTable extends Migration
       $table->string('nature_loss', 50)->nullable();
       $table->date('date_loss')->nullable();
       $table->string('contact_person')->nullable();
-      $table->decimal('loss_reserve', 10, 2)->nullable();
+      $table->string('loss_reserve')->nullable();
       $table->bigInteger('status_list_id')->unsigned();
       $table->text('remarks')->nullable()->nullable();
       $table->string('created_by', 100);
