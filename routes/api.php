@@ -27,3 +27,5 @@ Route::middleware('auth:api')->group(function () {
 Route::apiResource('assignment', 'API\AssignmentController');
 Route::apiResource('status_lists', 'API\StatusListController');
 Route::apiResource('user_levels', 'API\UserLevelController');
+
+Route::get('/assignment/edit/{assignment}', 'API\AssignmentController@edit');
