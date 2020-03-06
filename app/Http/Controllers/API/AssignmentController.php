@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\AssignmentCollection;
+use stdClass;
 
 class AssignmentController extends Controller
 {
@@ -20,7 +21,7 @@ class AssignmentController extends Controller
     return $request->validate([
       'insurer'        => 'required|string|max:20',
       'broker'         => 'required|string|max:20',
-      'ref_no'         => 'required|alpha_dash|max:32',
+      'ref_no'         => '',
       'name_insured'   => 'required|string|max:255',
       'adjuster'       => 'required|string|max:50',
       'third_party'    => 'required|string|max:50',
@@ -54,13 +55,18 @@ class AssignmentController extends Controller
    */
   public function store(Request $request)
   {
+    $ref_no = '';
+    $year = date('y');
+    $last = $this->get_last_assignment_in_table();
+    $ref_no = $year . '-' . str_pad(($last->id + 1), 5, '0', STR_PAD_LEFT);
+
     $this->formValidator($request);
 
     $create = Assignment::create([
       'date_assigned'  => now(),
       'insurer'        => $request->insurer,
       'broker'         => $request->broker,
-      'ref_no'         => $request->ref_no,
+      'ref_no'         => $ref_no,
       'name_insured'   => $request->name_insured,
       'adjuster'       => $request->adjuster,
       'third_party'    => $request->third_party,
@@ -81,6 +87,11 @@ class AssignmentController extends Controller
     }
 
     return response()->json(["message" => "Assignment created successfully!"], 201);
+  }
+
+  public function get_last_assignment_in_table()
+  {
+    return Assignment::get()->last();
   }
 
   /**
