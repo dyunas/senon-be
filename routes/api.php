@@ -24,8 +24,15 @@ Route::middleware('auth:api')->group(function () {
   Route::post('/logout', 'Auth\LogoutController@logout');
 });
 
+Route::apiResource('adjuster', 'API\AdjusterController');
 Route::apiResource('assignment', 'API\AssignmentController');
+Route::apiResource('brokers', 'API\BrokerController');
+Route::apiResource('insurer', 'API\InsurerController');
+Route::apiResource('policy', 'API\PolicyController');
+Route::apiResource('receiving', 'API\ReceivingController');
 Route::apiResource('status_lists', 'API\StatusListController');
 Route::apiResource('user_levels', 'API\UserLevelController');
 
 Route::get('/assignment/edit/{assignment}', 'API\AssignmentController@edit');
+
+Route::get('/graphs/cases_per_adjuster', 'API\CasesPerAdjusterReportsController@index');

@@ -17,4 +17,9 @@ class Assignment extends Model
   {
     return $this->belongsTo(StatusList::class);
   }
+
+  public function receiving_copy()
+  {
+    return $this->hasMany(Receiving::class, 'assignment_id', 'id');
+  }
 }
