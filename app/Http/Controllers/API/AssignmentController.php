@@ -83,7 +83,7 @@ class AssignmentController extends Controller
     ]);
 
     if (empty($create)) {
-      return response()->json(["message" => "Failed to create assignment."], 500);
+      return response()->json(["message" => "Failed to create assignment."], 400);
     }
 
     return response()->json(["message" => "Assignment created successfully!"], 201);
@@ -165,7 +165,7 @@ class AssignmentController extends Controller
     ]);
 
     if (empty($update)) {
-      return response()->json(["message" => "Failed to create assignment."], 500);
+      return response()->json(["message" => "Failed to update assignment."], 400);
     }
 
     return response()->json(["message" => "Assignment updated successfully!"], 201);
