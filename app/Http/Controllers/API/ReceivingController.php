@@ -17,13 +17,14 @@ class ReceivingController extends Controller
   {
     return $request->validate(
       [
-        'attachment'    => 'required|image|mimes: jpeg|max: 4096',
-        'received_by'   => 'required|string',
-        'received_date' => 'required|string|max:20',
+        'attachment'     => 'required|max: 4096',
+        'received_by'    => 'required|string',
+        'received_date'  => 'required',
+        'status_list_id' => 'required',
+        'created_at'     => 'required'
       ],
       $messages = [
-        'require' => 'The :attribute field is required.',
-        'mimes'   => 'Only .jpeg are allowed.'
+        'required' => 'The :attribute field is required.',
       ]
     );
   }
@@ -49,9 +50,11 @@ class ReceivingController extends Controller
     $this->formValidator($request);
 
     $receiving = Receiving::create([
-      'assignment_id' => $request->assignment_id,
-      'received_by'   => $request->received_by,
-      'received_date' => $request->receibed_date
+      'assignment_id'  => $request->assignment_id,
+      'status_list_id' => $request->status_list_id,
+      'received_by'    => $request->received_by,
+      'received_date'  => $request->receibed_date,
+      'created_at'     => now()
     ]);
 
     if (empty($receiving)) {
