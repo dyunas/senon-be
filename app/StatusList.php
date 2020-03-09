@@ -24,4 +24,9 @@ class StatusList extends Model
   {
     return $this->hasMany(Assignment::class);
   }
+
+  public function receiving()
+  {
+    return $this->hasMany(Receiving::class);
+  }
 }

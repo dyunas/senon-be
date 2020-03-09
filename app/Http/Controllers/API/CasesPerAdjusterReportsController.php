@@ -17,20 +17,6 @@ class CasesPerAdjusterReportsController extends Controller
    */
   public function index()
   {
-    $active = $this->getActiveCasesPerAdjuster();
-    $completed = $this->getCompletedCasesPerAdjuster();
-    // $cancelled = $this->getCancelledCasesPerAdjuster();
-
-    $data = array();
-
-    $data['active'] = $active;
-    $data['completed'] = $completed;
-
-    return $data;
-  }
-
-  public function getActiveCasesPerAdjuster()
-  {
     return DB::select('
       SELECT a.adjuster,
         (
@@ -38,21 +24,13 @@ class CasesPerAdjusterReportsController extends Controller
           FROM assignments b 
           WHERE b.adjuster = a.adjuster 
           AND b.status_list_id != 11
-        ) as total
-      FROM adjusters a
-    ');
-  }
-
-  public function getCompletedCasesPerAdjuster()
-  {
-    return DB::select('
-      SELECT a.adjuster,
+        ) as active,
         (
-          SELECT COALESCE(COUNT(b.id), 0) 
-          FROM assignments b 
-          WHERE b.adjuster = a.adjuster 
-          AND b.status_list_id = 11
-        ) as total
+          SELECT COALESCE(COUNT(c.id), 0)
+          FROM assignments c
+          WHERE c.adjuster = a.adjuster
+          AND c.status_list_id = 11
+        ) as completed
       FROM adjusters a
     ');
   }

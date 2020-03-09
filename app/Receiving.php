@@ -24,4 +24,9 @@ class Receiving extends Model
   {
     return $this->belongsTo(Assignment::class);
   }
+
+  public function status()
+  {
+    return $this->belongsTo(StatusList::class);
+  }
 }
