@@ -21,7 +21,7 @@ class ReceivingController extends Controller
         'received_by'    => 'required|string',
         'received_date'  => 'required',
         'status_list_id' => 'required',
-        'created_at'     => 'required'
+        'created_at'     => ''
       ],
       $messages = [
         'required' => 'The :attribute field is required.',
@@ -53,7 +53,7 @@ class ReceivingController extends Controller
       'assignment_id'  => $request->assignment_id,
       'status_list_id' => $request->status_list_id,
       'received_by'    => $request->received_by,
-      'received_date'  => $request->receibed_date,
+      'received_date'  => $request->received_date,
       'created_at'     => now()
     ]);
 
