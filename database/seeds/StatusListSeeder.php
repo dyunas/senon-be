@@ -17,16 +17,15 @@ class StatusListSeeder extends Seeder
 
     $lists = [
       ['status' => 'For inspection'],
+      ['status' => 'Inspected for Reporting'],
       ['status' => 'Awaiting Documents'],
-      ['status' => 'Awaiting Insurer\'s position'],
-      ['status' => 'Awaiting lacking documents'],
-      ['status' => 'With 15 days ultimatum until'],
-      ['status' => 'Awaiting Insured\'s/Broker reaction'],
       ['status' => 'Under evaluation'],
-      ['status' => 'Awaiting Insurer\'s approval'],
-      ['status' => 'Awaiting acceptance of offer'],
-      ['status' => 'For closing'],
-      ['status' => 'Completed'],
+      ['status' => 'Awaiting Insurer\'s Position'],
+      ['status' => 'Awaiting Insurer\'s Approval'],
+      ['status' => 'Awaiting Insured\'s Acceptance of Offer'],
+      ['status' => 'Awaiting Insured\'s Reaction'],
+      ['status' => 'Closed'],
+      ['status' => 'Awaiting Insurer\'s Approval']
     ];
 
     foreach ($lists as $list) {
