@@ -36,3 +36,5 @@ Route::apiResource('user_levels', 'API\UserLevelController');
 Route::get('/assignment/edit/{assignment}', 'API\AssignmentController@edit');
 
 Route::get('/graphs/cases_per_adjuster', 'API\CasesPerAdjusterReportsController@index');
+
+Route::patch('/update_assignment_status/{assignment}', 'API\AssignmentController@update_assignment_status');

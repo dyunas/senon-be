@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Assignment;
+use App\AssignmentChangeLog;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\AssignmentCollection;
+use App\StatusList;
 use stdClass;
 
 class AssignmentController extends Controller
@@ -62,31 +64,37 @@ class AssignmentController extends Controller
 
     $this->formValidator($request);
 
-    $create = Assignment::create([
-      'date_assigned'  => now(),
-      'insurer'        => $request->insurer,
-      'broker'         => $request->broker,
-      'ref_no'         => $ref_no,
-      'name_insured'   => $request->name_insured,
-      'adjuster'       => $request->adjuster,
-      'third_party'    => $request->third_party,
-      'pol_no'         => $request->pol_no,
-      'pol_type'       => $request->pol_type,
-      'risk_location'  => $request->risk_location,
-      'nature_loss'    => $request->nature_loss,
-      'date_loss'      => $request->date_loss,
-      'contact_person' => $request->contact_person,
-      'loss_reserve'   => $request->loss_reserve,
-      'status_list_id' => 1,
-      'remarks'        => $request->remarks,
-      'created_by'     => $request->created_by,
-    ]);
+    try {
+      $assignment = Assignment::create([
+        'date_assigned'  => now(),
+        'insurer'        => $request->insurer,
+        'broker'         => $request->broker,
+        'ref_no'         => $ref_no,
+        'name_insured'   => $request->name_insured,
+        'adjuster'       => $request->adjuster,
+        'third_party'    => $request->third_party,
+        'pol_no'         => $request->pol_no,
+        'pol_type'       => $request->pol_type,
+        'risk_location'  => $request->risk_location,
+        'nature_loss'    => $request->nature_loss,
+        'date_loss'      => $request->date_loss,
+        'contact_person' => $request->contact_person,
+        'loss_reserve'   => $request->loss_reserve,
+        'status_list_id' => 1,
+        'remarks'        => $request->remarks,
+        'created_by'     => $request->created_by,
+      ]);
 
-    if (empty($create)) {
-      return response()->json(["message" => "Failed to create assignment."], 400);
+      AssignmentChangeLog::create([
+        'assignment_id' => $assignment->id,
+        'log_message'   => 'Assignment created',
+        'log_date'      => now()
+      ]);
+
+      return response()->json(["message" => "Assignment created successfully!"], 201);
+    } catch (\Throwable $error) {
+      return response()->json(["message" => "Failed to create assignment.", "error" => $error], 500);
     }
-
-    return response()->json(["message" => "Assignment created successfully!"], 201);
   }
 
   public function get_last_assignment_in_table()
@@ -144,31 +152,54 @@ class AssignmentController extends Controller
       'data.remarks'        => 'string|nullable',
     ]);
 
-    $update = $assignment->update([
-      'insurer'        => $request->data['insurer'],
-      'broker'         => $request->data['broker'],
-      'ref_no'         => $request->data['ref_no'],
-      'name_insured'   => $request->data['name_insured'],
-      'adjuster'       => $request->data['adjuster'],
-      'third_party'    => $request->data['third_party'],
-      'pol_no'         => $request->data['pol_no'],
-      'pol_type'       => $request->data['pol_type'],
-      'risk_location'  => $request->data['risk_location'],
-      'nature_loss'    => $request->data['nature_loss'],
-      'date_loss'      => $request->data['date_loss'],
-      'contact_person' => $request->data['contact_person'],
-      'loss_reserve'   => $request->data['loss_reserve'],
-      'status_list_id' => $request->data['status_list_id'],
-      'remarks'        => $request->data['remarks'],
-      'created_by'     => $request->data['created_by'],
-      'updated_by'     => $request->data['updated_by'],
-    ]);
+    try {
+      $assignment->update([
+        'insurer'        => $request->data['insurer'],
+        'broker'         => $request->data['broker'],
+        'ref_no'         => $request->data['ref_no'],
+        'name_insured'   => $request->data['name_insured'],
+        'adjuster'       => $request->data['adjuster'],
+        'third_party'    => $request->data['third_party'],
+        'pol_no'         => $request->data['pol_no'],
+        'pol_type'       => $request->data['pol_type'],
+        'risk_location'  => $request->data['risk_location'],
+        'nature_loss'    => $request->data['nature_loss'],
+        'date_loss'      => $request->data['date_loss'],
+        'contact_person' => $request->data['contact_person'],
+        'loss_reserve'   => $request->data['loss_reserve'],
+        'status_list_id' => $request->data['status_list_id'],
+        'remarks'        => $request->data['remarks'],
+        'created_by'     => $request->data['created_by'],
+        'updated_by'     => $request->data['updated_by'],
+      ]);
 
-    if (empty($update)) {
-      return response()->json(["message" => "Failed to update assignment."], 400);
+      return response()->json(["message" => "Assignment updated successfully!"], 201);
+    } catch (\Throwable $error) {
+      return response()->json(["message" => "Failed to update assignment.", "error" => $error], 500);
+    }
+  }
+
+  public function update_assignment_status(Request $request, Assignment $assignment)
+  {
+    try {
+      $assignment->update([
+        'status_list_id' => $request->data['status_list_id']
+      ]);
+
+      $status = StatusList::where('id', $request->data['status_list_id'])->first();
+
+      AssignmentChangeLog::create([
+        'assignment_id' => $assignment->id,
+        'log_message'   => 'Assignment status updated to ' . $status->status,
+        'log_date'      => now()
+      ]);
+
+      return response()->json(["message" => "Assignment status updated to " . $status->status], 201);
+    } catch (\Throwable $error) {
+      return response()->json(["message" => "Failed to update assignment status.", "error" => $error], 500);
     }
 
-    return response()->json(["message" => "Assignment updated successfully!"], 201);
+    return $assignment;
   }
 
   /**

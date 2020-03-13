@@ -25,7 +25,6 @@ class StatusListSeeder extends Seeder
       ['status' => 'Awaiting Insured\'s Acceptance of Offer'],
       ['status' => 'Awaiting Insured\'s Reaction'],
       ['status' => 'Closed'],
-      ['status' => 'Awaiting Insurer\'s Approval']
     ];
 
     foreach ($lists as $list) {

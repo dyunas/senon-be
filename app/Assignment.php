@@ -22,4 +22,9 @@ class Assignment extends Model
   {
     return $this->hasMany(Receiving::class, 'assignment_id', 'id');
   }
+
+  public function change_logs()
+  {
+    return $this->hasMany(AssignmentChangeLog::class);
+  }
 }

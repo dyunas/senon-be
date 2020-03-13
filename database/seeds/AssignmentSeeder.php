@@ -31,7 +31,7 @@ class AssignmentSeeder extends Seeder
         'date_loss'      => now(),
         'contact_person' => '',
         'loss_reserve'   => '2000.00',
-        'status_list_id'         => 1,
+        'status_list_id' => 1,
         'remarks'        => '',
         'created_by'     => 'Jonathan Quebral',
         'updated_by'     => 'Jonathan Quebral'

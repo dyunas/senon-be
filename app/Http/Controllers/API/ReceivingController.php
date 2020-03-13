@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
 use App\Receiving;
+use App\Assignment;
+use App\StatusList;
+use App\AssignmentChangeLog;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class ReceivingController extends Controller
 {
@@ -17,11 +20,12 @@ class ReceivingController extends Controller
   {
     return $request->validate(
       [
-        'attachment'     => 'required|max: 4096',
-        'received_by'    => 'required|string',
-        'received_date'  => 'required',
-        'status_list_id' => 'required',
-        'created_at'     => ''
+        'attachment'       => 'required|max: 4096',
+        'report_submitted' => 'required|string',
+        'received_by'      => 'required|string',
+        'received_date'    => 'required',
+        'status_list_id'   => 'required',
+        'created_at'       => ''
       ],
       $messages = [
         'required' => 'The :attribute field is required.',
@@ -49,21 +53,34 @@ class ReceivingController extends Controller
   {
     $this->formValidator($request);
 
-    $receiving = Receiving::create([
-      'assignment_id'  => $request->assignment_id,
-      'status_list_id' => $request->status_list_id,
-      'received_by'    => $request->received_by,
-      'received_date'  => $request->received_date,
-      'created_at'     => now()
-    ]);
+    try {
+      $receiving = Receiving::create([
+        'assignment_id'    => $request->assignment_id,
+        'status_list_id'   => $request->status_list_id,
+        'report_submitted' => $request->report_submitted,
+        'received_by'      => $request->received_by,
+        'received_date'    => $request->received_date,
+        'created_at'       => now()
+      ]);
 
-    if (empty($receiving)) {
-      return response()->json(['message' => 'Failed to create attachment. Please try again.'], 400);
+      $status = StatusList::where('id', $receiving->status_list_id)->first();
+
+      AssignmentChangeLog::create([
+        'assignment_id' => $receiving->assignment_id,
+        'log_message'   => 'Assignment status updated to ' . $status->status,
+        'log_date'      => now()
+      ]);
+
+      Assignment::where('id', $request->assignment_id)->update([
+        'status_list_id' => $receiving->status_list_id
+      ]);
+
+      $this->uploadFileAttachment($receiving);
+
+      return response()->json(["message" => "Attachment created! Assignment status updated to " . $status->status], 201);
+    } catch (\Throwable $error) {
+      return response()->json(["message" => "Failed to create attachment. Please try again.", "error" => $error], 500);
     }
-
-    $this->uploadFileAttachment($receiving);
-
-    return response()->json(['message' => 'Attachment created!'], 201);
   }
 
   public function uploadFileAttachment($receiving)

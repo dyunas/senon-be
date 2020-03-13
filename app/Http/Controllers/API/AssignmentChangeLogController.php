@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use stdClass;
-use App\Assignment;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-class CasesPerAdjusterReportsController extends Controller
+class AssignmentChangeLogController extends Controller
 {
   /**
    * Display a listing of the resource.
@@ -17,22 +14,7 @@ class CasesPerAdjusterReportsController extends Controller
    */
   public function index()
   {
-    return DB::select('
-      SELECT a.adjuster,
-        (
-          SELECT COALESCE(COUNT(b.id), 0) 
-          FROM assignments b 
-          WHERE b.adjuster = a.adjuster 
-          AND b.status_list_id != 9
-        ) as active,
-        (
-          SELECT COALESCE(COUNT(c.id), 0)
-          FROM assignments c
-          WHERE c.adjuster = a.adjuster
-          AND c.status_list_id = 9
-        ) as completed
-      FROM adjusters a
-    ');
+    //
   }
 
   /**

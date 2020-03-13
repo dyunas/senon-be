@@ -42,5 +42,9 @@ class DatabaseSeeder extends Seeder
     // run BrokerSeeder
     $this->call(BrokerSeeder::class);
     $this->command->info('Broker seeding completed!');
+
+    // run AssignmentChangeLogSeeder
+    $this->call(AssignmentChangeLogSeeder::class);
+    $this->command->info('Assignment change logs seeding completed!');
   }
 }
