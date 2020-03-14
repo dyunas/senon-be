@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\API;
 
 use App\Assignment;
+use App\StatusList;
 use App\AssignmentChangeLog;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\AssignmentCollection;
-use App\StatusList;
-use stdClass;
+use Illuminate\Validation\ValidationException;
 
 class AssignmentController extends Controller
 {
@@ -92,8 +92,16 @@ class AssignmentController extends Controller
       ]);
 
       return response()->json(["message" => "Assignment created successfully!"], 201);
+    } catch (ValidationException $error) {
+      return response()->json([
+        'message' => 'Something went wrong while creating assignment. Please try again.',
+        'error'   => $error->errors()
+      ], $error->status);
     } catch (\Throwable $error) {
-      return response()->json(["message" => "Failed to create assignment.", "error" => $error], 500);
+      return response()->json([
+        'message' => 'Something went wrong while creating assignment. Please try again.',
+        'error'   => $error->getMessage()
+      ], 500);
     }
   }
 
@@ -169,13 +177,20 @@ class AssignmentController extends Controller
         'loss_reserve'   => $request->data['loss_reserve'],
         'status_list_id' => $request->data['status_list_id'],
         'remarks'        => $request->data['remarks'],
-        'created_by'     => $request->data['created_by'],
         'updated_by'     => $request->data['updated_by'],
       ]);
 
       return response()->json(["message" => "Assignment updated successfully!"], 201);
+    } catch (ValidationException $error) {
+      return response()->json([
+        'message' => 'Something went wrong while updating assignment. Please try again.',
+        'error'   => $error->errors()
+      ], $error->status);
     } catch (\Throwable $error) {
-      return response()->json(["message" => "Failed to update assignment.", "error" => $error], 500);
+      return response()->json([
+        'message' => 'Something went wrong while updating assignment. Please try again.',
+        'error'   => $error->getMessage()
+      ], 500);
     }
   }
 
@@ -195,11 +210,17 @@ class AssignmentController extends Controller
       ]);
 
       return response()->json(["message" => "Assignment status updated to " . $status->status], 201);
+    } catch (ValidationException $error) {
+      return response()->json([
+        'message' => 'Something went wrong while updating assignment status. Please try again.',
+        'error'   => $error->errors()
+      ], $error->status);
     } catch (\Throwable $error) {
-      return response()->json(["message" => "Failed to update assignment status.", "error" => $error], 500);
+      return response()->json([
+        'message' => 'Something went wrong while updating assignment status. Please try again.',
+        'error'   => $error->getMessage()
+      ], 500);
     }
-
-    return $assignment;
   }
 
   /**

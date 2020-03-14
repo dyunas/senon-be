@@ -8,6 +8,7 @@ use App\StatusList;
 use App\AssignmentChangeLog;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\ValidationException;
 
 class ReceivingController extends Controller
 {
@@ -78,8 +79,16 @@ class ReceivingController extends Controller
       $this->uploadFileAttachment($receiving);
 
       return response()->json(["message" => "Attachment created! Assignment status updated to " . $status->status], 201);
+    } catch (ValidationException $error) {
+      return response()->json([
+        'message' => 'Something went wrong while creating attachment. Please try again.',
+        'error'   => $error->errors()
+      ], $error->status);
     } catch (\Throwable $error) {
-      return response()->json(["message" => "Failed to create attachment. Please try again.", "error" => $error], 500);
+      return response()->json([
+        'message' => 'Something went wrong while creating attachment. Please try again.',
+        'error'   => $error->getMessage()
+      ], 500);
     }
   }
 

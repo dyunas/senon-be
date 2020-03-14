@@ -5,9 +5,29 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Adjuster;
+use Exception;
+use Illuminate\Validation\ValidationException;
 
 class AdjusterController extends Controller
 {
+  /**
+   * Form validation rules.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  protected function formValidator($request)
+  {
+    return $request->validate(
+      [
+        'adjuster' => 'required|string',
+      ],
+      $messages = [
+        'required' => 'The :attribute field is required.',
+        'string'   => 'Must be of string value'
+      ]
+    );
+  }
+
   /**
    * Display a listing of the resource.
    *
@@ -26,7 +46,27 @@ class AdjusterController extends Controller
    */
   public function store(Request $request)
   {
-    //
+    try {
+      // validates the data
+      $this->formValidator($request);
+
+      // updates the record after data is validated
+      Adjuster::create([
+        'adjuster' => $request->adjuster
+      ]);
+
+      return response()->json(['message' => 'Adjuster added'], 201);
+    } catch (ValidationException $error) {
+      return response()->json([
+        'message' => 'Something went wrong while adding adjuster. Please try again.',
+        'error'   => $error->errors()
+      ], $error->status);
+    } catch (\Throwable $error) {
+      return response()->json([
+        'message' => 'Something went wrong while adding adjuster. Please try again.',
+        'error'   => $error->getMessage()
+      ], 500);
+    }
   }
 
   /**
@@ -35,21 +75,49 @@ class AdjusterController extends Controller
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function show($id)
+  public function show(Adjuster $adjuster)
   {
-    //
+    return $adjuster;
   }
 
   /**
    * Update the specified resource in storage.
    *
    * @param  \Illuminate\Http\Request  $request
-   * @param  int  $id
+   * @param  int  $adjuster
    * @return \Illuminate\Http\Response
    */
-  public function update(Request $request, $id)
+  public function update(Request $request, Adjuster $adjuster)
   {
-    //
+    try {
+      // validate the data
+      $request->validate(
+        [
+          'data.adjuster' => 'required|string'
+        ],
+        $message = [
+          'required' => 'The :attribute field is required.',
+          'string'   => 'Must be of string value'
+        ]
+      );
+
+      // updates record after data is validated
+      $adjuster->update([
+        'adjuster' => $request->data['adjuster']
+      ]);
+
+      return response()->json(['message' => 'Adjuster updated'], 201);
+    } catch (ValidationException $error) {
+      return response()->json([
+        'message' => 'Something went wrong while adding adjuster. Please try again.',
+        'error'   => $error->errors()
+      ], $error->status);
+    } catch (Exception $error) {
+      return response()->json([
+        'message' => 'Something went wrong while adding adjuster. Please try again.',
+        'error'   => $error->getMessage()
+      ], 500);
+    }
   }
 
   /**
