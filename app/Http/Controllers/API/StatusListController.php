@@ -5,10 +5,23 @@ namespace App\Http\Controllers\API;
 use App\StatusList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Validation\ValidationException;
 
 class StatusListController extends Controller
 {
+  protected function formValidator($request)
+  {
+    return $request->validate(
+      [
+        'status' => 'required|string',
+      ],
+      $messages = [
+        'required' => 'The :attribute field is required.',
+        'string'   => 'Must be of string value'
+      ]
+    );
+  }
+
   /**
    * Display a listing of the resource.
    *
@@ -20,16 +33,6 @@ class StatusListController extends Controller
   }
 
   /**
-   * Show the form for creating a new resource.
-   *
-   * @return \Illuminate\Http\Response
-   */
-  public function create()
-  {
-    //
-  }
-
-  /**
    * Store a newly created resource in storage.
    *
    * @param  \Illuminate\Http\Request  $request
@@ -37,7 +40,27 @@ class StatusListController extends Controller
    */
   public function store(Request $request)
   {
-    //
+    try {
+      // validates the data
+      $this->formValidator($request);
+
+      // creates new record after data is validated
+      StatusList::create([
+        'status' => $request->status
+      ]);
+
+      return response()->json(["message" => "Event status added"], 201);
+    } catch (ValidationException $error) {
+      return response()->json([
+        "message" => "Something went wrong while adding event status. Please try again.",
+        "error"   => $error->errors()
+      ], $error->status);
+    } catch (\Throwable $error) {
+      return response()->json([
+        "message" => "Something went wrong while adding event status. Please try again.",
+        "error"   => $error->getMessage()
+      ], 500);
+    }
   }
 
   /**
@@ -48,7 +71,7 @@ class StatusListController extends Controller
    */
   public function show(StatusList $statusList)
   {
-    //
+    return $statusList;
   }
 
   /**
@@ -71,7 +94,33 @@ class StatusListController extends Controller
    */
   public function update(Request $request, StatusList $statusList)
   {
-    //
+    try {
+      $request->validate(
+        [
+          'data.status' => 'required|string',
+        ],
+        $messages = [
+          'required' => 'The :attribute field is required.',
+          'string'   => 'Must be of string value'
+        ]
+      );
+
+      $statusList->update([
+        "status" => $request->data["status"]
+      ]);
+
+      return response()->json(["message" => "Event status updated"], 201);
+    } catch (ValidationException $error) {
+      return response()->json([
+        "message" => "Something went wrong while updating event status. Please try again",
+        "error"   => $error->errors()
+      ], $error->status);
+    } catch (\Throwable $error) {
+      return response()->json([
+        "message" => "Something went wrong while updating event status. Please try again",
+        "error"   => $error->getMessage()
+      ], 500);
+    }
   }
 
   /**
