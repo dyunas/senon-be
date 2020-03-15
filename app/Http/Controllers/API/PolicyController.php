@@ -13,7 +13,7 @@ class PolicyController extends Controller
   {
     return $request->validate(
       [
-        'policy_type' => 'required|string',
+        'policy' => 'required|string',
       ],
       $messages = [
         'required' => 'The :attribute field is required.',
@@ -87,7 +87,7 @@ class PolicyController extends Controller
       // validates the data
       $request->validate(
         [
-          'data.policy_type' => 'required|string'
+          'data.policy' => 'required|string'
         ],
         $message = [
           'required' => 'The :attribute field is required.',

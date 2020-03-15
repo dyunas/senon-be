@@ -87,7 +87,7 @@ class InsurerController extends Controller
       // validates the data
       $request->validate(
         [
-          'data.adjuster' => 'required|string'
+          'data.insurer' => 'required|string'
         ],
         $message = [
           'required' => 'The :attribute field is required.',
