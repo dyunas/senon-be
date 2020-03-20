@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterTableReceivingsAddColummReportSubmitted extends Migration
+class AlterTableReceivingAddForeignKey extends Migration
 {
   /**
    * Run the migrations.
@@ -14,7 +14,7 @@ class AlterTableReceivingsAddColummReportSubmitted extends Migration
   public function up()
   {
     Schema::table('receivings', function (Blueprint $table) {
-      $table->bigInteger('report_submitted_id')->unsigned()->after('attachment');
+      $table->foreign('report_submitted_id')->references('id')->on('report_lists');
     });
   }
 
@@ -26,7 +26,7 @@ class AlterTableReceivingsAddColummReportSubmitted extends Migration
   public function down()
   {
     Schema::table('receivings', function (Blueprint $table) {
-      $table->dropColumn('report_submitted');
+      $table->dropForeign('report_submitted_id');
     });
   }
 }

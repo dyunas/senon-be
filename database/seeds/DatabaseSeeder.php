@@ -46,5 +46,9 @@ class DatabaseSeeder extends Seeder
     // run AssignmentChangeLogSeeder
     $this->call(AssignmentChangeLogSeeder::class);
     $this->command->info('Assignment change logs seeding completed!');
+
+    // run ReportListSeeder
+    $this->call(ReportListSeeder::class);
+    $this->command->info('Reports list seeding completed!');
   }
 }

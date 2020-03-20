@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterTableReceivingsAddColummReportSubmitted extends Migration
+class CreateReportListsTable extends Migration
 {
   /**
    * Run the migrations.
@@ -13,8 +13,10 @@ class AlterTableReceivingsAddColummReportSubmitted extends Migration
    */
   public function up()
   {
-    Schema::table('receivings', function (Blueprint $table) {
-      $table->bigInteger('report_submitted_id')->unsigned()->after('attachment');
+    Schema::create('report_lists', function (Blueprint $table) {
+      $table->bigIncrements('id');
+      $table->string('report');
+      $table->timestamps();
     });
   }
 
@@ -25,8 +27,6 @@ class AlterTableReceivingsAddColummReportSubmitted extends Migration
    */
   public function down()
   {
-    Schema::table('receivings', function (Blueprint $table) {
-      $table->dropColumn('report_submitted');
-    });
+    Schema::dropIfExists('report_lists');
   }
 }

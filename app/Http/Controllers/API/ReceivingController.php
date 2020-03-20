@@ -56,13 +56,15 @@ class ReceivingController extends Controller
 
     try {
       $receiving = Receiving::create([
-        'assignment_id'    => $request->assignment_id,
-        'status_list_id'   => $request->status_list_id,
-        'report_submitted' => $request->report_submitted,
-        'received_by'      => $request->received_by,
-        'received_date'    => $request->received_date,
-        'created_at'       => now()
+        'assignment_id'       => $request->assignment_id,
+        'status_list_id'      => $request->status_list_id,
+        'report_submitted_id' => $request->report_submitted_id,
+        'received_by'         => $request->received_by,
+        'received_date'       => $request->received_date,
+        'created_at'          => now()
       ]);
+
+      $this->uploadFileAttachment($receiving);
 
       $status = StatusList::where('id', $receiving->status_list_id)->first();
 
@@ -75,8 +77,6 @@ class ReceivingController extends Controller
       Assignment::where('id', $request->assignment_id)->update([
         'status_list_id' => $receiving->status_list_id
       ]);
-
-      $this->uploadFileAttachment($receiving);
 
       return response()->json(["message" => "Attachment created! Assignment status updated to " . $status->status], 201);
     } catch (ValidationException $error) {
