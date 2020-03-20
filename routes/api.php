@@ -31,6 +31,7 @@ Route::apiResource('insurer', 'API\InsurerController');
 Route::apiResource('policy', 'API\PolicyController');
 Route::apiResource('receiving', 'API\ReceivingController');
 Route::apiResource('status_lists', 'API\StatusListController');
+Route::apiResource('report_lists', 'API\ReportListController');
 Route::apiResource('user_levels', 'API\UserLevelController');
 
 Route::get('/assignment/edit/{assignment}', 'API\AssignmentController@edit');
