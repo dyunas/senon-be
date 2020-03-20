@@ -13,6 +13,14 @@ class ReportList extends Model
    */
   protected $guarded = [];
 
+  /**
+   * Indicates if the model should be timestamped.
+   *
+   * @var bool
+   */
+  public $timestamps = false;
+
+
   public function receivings()
   {
     return $this->hasMany(Receiving::class);
