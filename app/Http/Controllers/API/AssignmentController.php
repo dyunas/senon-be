@@ -26,14 +26,14 @@ class AssignmentController extends Controller
       'ref_no'         => '',
       'name_insured'   => 'required|string|max:255',
       'adjuster'       => 'required|string|max:50',
-      'third_party'    => 'required|string|max:50',
-      'pol_no'         => 'required|alpha_dash|max:32',
+      'third_party'    => 'string|max:50',
+      'pol_no'         => 'alpha_dash|max:32',
       'pol_type'       => 'required|string|max:50',
       'risk_location'  => 'required|string',
       'nature_loss'    => 'required|string|max:50',
       'date_loss'      => 'required|date',
       'contact_person' => 'required|string',
-      'loss_reserve'   => 'required|string',
+      'loss_reserve'   => 'string',
       'status_list_id' => 'required|numeric',
       'remarks'        => 'string|nullable',
     ]);
@@ -107,6 +107,7 @@ class AssignmentController extends Controller
 
   public function get_last_assignment_in_table()
   {
+    // return last assignment in the table
     return Assignment::get()->last();
   }
 
@@ -130,6 +131,7 @@ class AssignmentController extends Controller
    */
   public function edit(Assignment $assignment)
   {
+    // data of the assignment to be editted
     return $assignment;
   }
 
@@ -148,14 +150,14 @@ class AssignmentController extends Controller
       'data.ref_no'         => 'required|alpha_dash|max:32',
       'data.name_insured'   => 'required|string|max:255',
       'data.adjuster'       => 'required|string|max:50',
-      'data.third_party'    => 'required|string|max:50',
-      'data.pol_no'         => 'required|alpha_dash|max:32',
+      'data.third_party'    => 'string|max:50',
+      'data.pol_no'         => 'alpha_dash|max:32',
       'data.pol_type'       => 'required|string|max:50',
       'data.risk_location'  => 'required|string',
       'data.nature_loss'    => 'required|string|max:50',
       'data.date_loss'      => 'required|date',
       'data.contact_person' => 'required|string',
-      'data.loss_reserve'   => 'required|string',
+      'data.loss_reserve'   => 'string',
       'data.status_list_id' => 'required|numeric',
       'data.remarks'        => 'string|nullable',
     ]);
