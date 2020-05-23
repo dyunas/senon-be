@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\AssignmentCollection;
+use App\Http\Resources\AssignmentListCollection;
 use Illuminate\Validation\ValidationException;
 
 class AssignmentController extends Controller
@@ -45,9 +46,17 @@ class AssignmentController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function index()
+  public function index(Request $request)
   {
-    return AssignmentCollection::collection(Assignment::orderBy('id', 'desc')->get());
+    if (count($request->all()) > 0) {
+      $startRow   = (int) $request->startRow;
+      $fetchCount = (int) $request->fetchCount;
+      $orderBy    = $request->orderBy;
+
+      return AssignmentListCollection::collection(Assignment::where('id', '>', $startRow)->take($fetchCount)->orderBy($orderBy)->get());
+    }
+
+    return AssignmentListCollection::collection(Assignment::all());
   }
 
   /**
