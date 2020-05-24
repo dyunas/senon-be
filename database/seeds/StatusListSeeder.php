@@ -18,11 +18,12 @@ class StatusListSeeder extends Seeder
     $lists = [
       ['status' => 'For inspection'],
       ['status' => 'Inspected for Reporting'],
-      ['status' => 'Awaiting Documents'],
+      ['status' => 'Awaiting Submission of Necessary Documents'],
+      ['status' => 'Awaiting Submission of Lacking Documents'],
       ['status' => 'Under evaluation'],
       ['status' => 'Awaiting Insurer\'s Position'],
       ['status' => 'Awaiting Insurer\'s Approval'],
-      ['status' => 'Awaiting Insured\'s Acceptance of Offer'],
+      ['status' => 'Awaiting Acceptance of Offer'],
       ['status' => 'Awaiting Insured\'s Reaction'],
       ['status' => 'Closed'],
     ];
