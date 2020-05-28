@@ -25,12 +25,12 @@ class Receiving extends Model
     return $this->belongsTo(Assignment::class);
   }
 
-  public function status()
+  public function status_list()
   {
     return $this->belongsTo(StatusList::class);
   }
 
-  public function report()
+  public function report_submitted()
   {
     return $this->belongsTo(ReportList::class);
   }

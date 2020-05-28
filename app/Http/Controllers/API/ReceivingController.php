@@ -8,6 +8,7 @@ use App\StatusList;
 use App\AssignmentChangeLog;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ReceivingsCollection;
 use Illuminate\Validation\ValidationException;
 
 class ReceivingController extends Controller
@@ -39,9 +40,9 @@ class ReceivingController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function index()
+  public function index(Request $request)
   {
-    return Receiving::all();
+    return ReceivingsCollection::collection(Receiving::where('assignment_id', $request->assignment_id)->get());
   }
 
   /**

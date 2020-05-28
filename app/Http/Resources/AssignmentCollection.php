@@ -32,7 +32,6 @@ class AssignmentCollection extends JsonResource
       'contact_person' => $this->contact_person,
       'loss_reserve'   => $this->loss_reserve,
       'status'         => $this->status_list->status,
-      'receiving_copy' => $this->receiving_copy,
       'change_logs'    => $this->change_logs,
       'remarks'        => $this->remarks,
       'created_by'     => $this->created_by,

@@ -21,7 +21,7 @@ class ReportList extends Model
   public $timestamps = false;
 
 
-  public function receivings()
+  public function receiving()
   {
     return $this->hasMany(Receiving::class);
   }
