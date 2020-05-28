@@ -22,6 +22,7 @@ class AssignmentController extends Controller
   protected function formValidator($request)
   {
     return $request->validate([
+      'claim_num'      => '',
       'insurer'        => 'required|string|max:20',
       'broker'         => 'required|string|max:20',
       'ref_no'         => '',
@@ -80,6 +81,7 @@ class AssignmentController extends Controller
         'insurer'        => $request->insurer,
         'broker'         => $request->broker,
         'ref_no'         => $ref_no,
+        'claim_num'      => $request->claim_num,
         'name_insured'   => $request->name_insured,
         'adjuster'       => $request->adjuster,
         'third_party'    => $request->third_party,
@@ -158,7 +160,8 @@ class AssignmentController extends Controller
     $request->validate([
       'data.insurer'        => 'required|string|max:20',
       'data.broker'         => 'required|string|max:20',
-      'data.ref_no'         => 'required|alpha_dash|max:32',
+      'data.ref_no'         => '',
+      'data.claim_num'      => '',
       'data.name_insured'   => 'required|string|max:255',
       'data.adjuster'       => 'required|string|max:50',
       'data.third_party'    => '',
@@ -179,6 +182,7 @@ class AssignmentController extends Controller
         'insurer'        => $request->data['insurer'],
         'broker'         => $request->data['broker'],
         'ref_no'         => $request->data['ref_no'],
+        'claim_num'      => $request->data['claim_num'],
         'name_insured'   => $request->data['name_insured'],
         'adjuster'       => $request->data['adjuster'],
         'third_party'    => $request->data['third_party'],

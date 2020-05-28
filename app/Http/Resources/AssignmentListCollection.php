@@ -17,9 +17,11 @@ class AssignmentListCollection extends JsonResource
   {
     return [
       'id'             => $this->id,
+      'date_assigned'  => $this->date_assigned,
       'insurer'        => $this->insurer,
       'broker'         => $this->broker,
       'ref_no'         => $this->ref_no,
+      'claim_num'      => $this->claim_num,
       'name_insured'   => $this->name_insured,
       'adjuster'       => $this->adjuster,
       'date_loss'      => $this->date_loss,
