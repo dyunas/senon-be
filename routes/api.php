@@ -40,7 +40,7 @@ Route::get('/graphs/cases_per_adjuster', 'API\CasesPerAdjusterReportsController@
 
 Route::patch('/update_assignment_status/{assignment}', 'API\AssignmentController@update_assignment_status');
 
-Route::get('/db_bckp', 'API\DatabaseBackUpController@index');
-Route::get('/create_bckp', 'API\DatabaseBackUpController@create');
-Route::get('/download_db_bckp/{file_name}', 'API\DatabaseBackUpController@download_db_backup');
-Route::get('/delete_bckp/{file_name}', 'API\DatabaseBackUpController@destroy');
+Route::get('/db_bckp', 'API\BackUpController@index');
+Route::get('/create_bckp', 'API\BackUpController@create');
+Route::get('/download_db_bckp/{file_name}', 'API\BackUpController@download_db_backup');
+Route::get('/delete_bckp/{file_name}', 'API\BackUpController@destroy');
