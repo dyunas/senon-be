@@ -15,7 +15,7 @@ class CreateReceivingsTable extends Migration
   {
     Schema::create('receivings', function (Blueprint $table) {
       $table->bigIncrements('id');
-      $table->bigInteger('assignment_id')->unsigned();
+      $table->string('assignment_id');
       $table->string('attachment');
       $table->string('received_by', 20);
       $table->date('received_date');

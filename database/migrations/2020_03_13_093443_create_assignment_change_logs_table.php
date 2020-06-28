@@ -15,8 +15,7 @@ class CreateAssignmentChangeLogsTable extends Migration
   {
     Schema::create('assignment_change_logs', function (Blueprint $table) {
       $table->bigIncrements('id');
-      $table->bigInteger('assignment_id')->unsigned();
-      $table->foreign('assignment_id')->references('id')->on('assignments');
+      $table->string('assignment_id');
       $table->text('log_message');
       $table->timestamp('log_date');
     });

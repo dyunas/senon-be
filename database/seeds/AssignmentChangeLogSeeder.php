@@ -16,7 +16,7 @@ class AssignmentChangeLogSeeder extends Seeder
     DB::table('assignment_change_logs')->delete();
 
     AssignmentChangeLog::create([
-      'assignment_id' => 1,
+      'assignment_id' => '19-8641',
       'log_message'   => 'Assignment created',
       'log_date'      => now()
     ]);

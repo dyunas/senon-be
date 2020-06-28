@@ -18,6 +18,7 @@ class AssignmentSeeder extends Seeder
     Assignment::create(
       array(
         'date_assigned'  => now(),
+        'date_inspected' => now(),
         'insurer'        => 'Malayan',
         'broker'         => 'MARSH',
         'ref_no'         => '19-8641',

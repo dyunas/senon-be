@@ -20,11 +20,11 @@ class Assignment extends Model
 
   public function receiving_copy()
   {
-    return $this->hasMany(Receiving::class, 'assignment_id', 'id');
+    return $this->hasMany(Receiving::class, 'assignment_id', 'ref_no');
   }
 
   public function change_logs()
   {
-    return $this->hasMany(AssignmentChangeLog::class);
+    return $this->hasMany(AssignmentChangeLog::class, 'assignment_id', 'ref_no');
   }
 }

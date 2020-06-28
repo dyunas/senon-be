@@ -15,8 +15,9 @@ class CreateReportListsTable extends Migration
   {
     Schema::create('report_lists', function (Blueprint $table) {
       $table->bigIncrements('id');
-      $table->string('report');
-      $table->timestamps();
+      $table->string('report')->nullable();
+      $table->integer('due_in_num_days')->nullable();
+      $table->string('notification_msg')->nullable();
     });
   }
 

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\AssignmentCollection;
 use App\Http\Resources\AssignmentListCollection;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
 
 class AssignmentController extends Controller
 {
@@ -71,16 +72,20 @@ class AssignmentController extends Controller
     $ref_no = '';
     $year = date('y');
     $last = $this->get_last_assignment_in_table();
-    $ref_no = $year . '-' . str_pad(($last->id + 1), 5, '0', STR_PAD_LEFT);
+    $last_ref_no = explode('-', $last->ref_no);
+    $next_ref_no = ($last_ref_no[0] === date('y')) ? $last_ref_no[0] . '-' . str_pad(($last_ref_no[1] + 1), 5, '0', STR_PAD_LEFT) : date('y') . '-' . str_pad(1, 5, '0', STR_PAD_LEFT);
 
     $this->formValidator($request);
+
+    DB::beginTransaction();
 
     try {
       $assignment = Assignment::create([
         'date_assigned'  => now(),
+        'date_inspected' => $request->date_inspected,
         'insurer'        => $request->insurer,
         'broker'         => $request->broker,
-        'ref_no'         => $ref_no,
+        'ref_no'         => $next_ref_no,
         'claim_num'      => $request->claim_num,
         'name_insured'   => $request->name_insured,
         'adjuster'       => $request->adjuster,
@@ -99,18 +104,24 @@ class AssignmentController extends Controller
       ]);
 
       AssignmentChangeLog::create([
-        'assignment_id' => $assignment->id,
+        'assignment_id' => $assignment->ref_no,
         'log_message'   => 'Assignment created',
         'log_date'      => now()
       ]);
 
+      DB::commit(); // commit changes into the database tables
+
       return response()->json(["message" => "Assignment created successfully!"], 201);
     } catch (ValidationException $error) {
+      DB::rollback(); // rollback changes when exception is caught
+
       return response()->json([
         'message' => 'Something went wrong while creating assignment. Please try again.',
         'error'   => $error->errors()
       ], $error->status);
     } catch (\Throwable $error) {
+      DB::rollback(); // rollback changes when exception is caught
+
       return response()->json([
         'message' => 'Something went wrong while creating assignment. Please try again.',
         'error'   => $error->getMessage()
@@ -179,6 +190,7 @@ class AssignmentController extends Controller
 
     try {
       $assignment->update([
+        'date_inspected' => $request->data['date_inspected'],
         'insurer'        => $request->data['insurer'],
         'broker'         => $request->data['broker'],
         'ref_no'         => $request->data['ref_no'],
@@ -215,6 +227,8 @@ class AssignmentController extends Controller
 
   public function update_assignment_status(Request $request, Assignment $assignment)
   {
+    DB::beginTransaction();
+
     try {
       $assignment->update([
         'status_list_id' => $request->data['status_list_id']
@@ -228,13 +242,19 @@ class AssignmentController extends Controller
         'log_date'      => now()
       ]);
 
+      DB::commit(); // commit changes into the database tables
+
       return response()->json(["message" => "Assignment status updated to " . $status->status], 201);
     } catch (ValidationException $error) {
+      DB::rollback(); // rollback changes when exception is caught
+
       return response()->json([
         'message' => 'Something went wrong while updating assignment status. Please try again.',
         'error'   => $error->errors()
       ], $error->status);
     } catch (\Throwable $error) {
+      DB::rollback(); // rollback changes when exception is caught
+
       return response()->json([
         'message' => 'Something went wrong while updating assignment status. Please try again.',
         'error'   => $error->getMessage()

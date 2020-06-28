@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ReceivingsCollection;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
 
 class ReceivingController extends Controller
 {
@@ -22,7 +23,7 @@ class ReceivingController extends Controller
   {
     return $request->validate(
       [
-        'attachment'       => 'required|max: 4096',
+        'attachment'       => 'max: 4096',
         'report_submitted' => 'required|string',
         'received_by'      => 'required|string',
         'received_date'    => 'required',
@@ -55,6 +56,8 @@ class ReceivingController extends Controller
   {
     $this->formValidator($request);
 
+    DB::beginTransaction();
+
     try {
       $receiving = Receiving::create([
         'assignment_id'       => $request->assignment_id,
@@ -65,7 +68,7 @@ class ReceivingController extends Controller
         'created_at'          => now()
       ]);
 
-      $this->uploadFileAttachment($receiving);
+      if ($request->attachment !== "null") $this->uploadFileAttachment($receiving);
 
       $status = StatusList::where('id', $receiving->status_list_id)->first();
 
@@ -75,17 +78,23 @@ class ReceivingController extends Controller
         'log_date'      => now()
       ]);
 
-      Assignment::where('id', $request->assignment_id)->update([
+      Assignment::where('ref_no', $request->assignment_id)->update([
         'status_list_id' => $receiving->status_list_id
       ]);
 
+      DB::commit(); // commit changes into the database tables
+
       return response()->json(["message" => "Attachment created! Assignment status updated to " . $status->status], 201);
     } catch (ValidationException $error) {
+      DB::rollback(); // rollback changes when exception is caught
+
       return response()->json([
         'message' => 'Something went wrong while creating attachment. Please try again.',
         'error'   => $error->errors()
       ], $error->status);
     } catch (\Throwable $error) {
+      DB::rollback(); // rollback changes when exception is caught
+
       return response()->json([
         'message' => 'Something went wrong while creating attachment. Please try again.',
         'error'   => $error->getMessage()

@@ -22,7 +22,7 @@ class Receiving extends Model
 
   public function assignment()
   {
-    return $this->belongsTo(Assignment::class);
+    return $this->belongsTo(Assignment::class, 'ref_no', 'assignment_id');
   }
 
   public function status_list()

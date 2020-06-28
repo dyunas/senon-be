@@ -18,6 +18,7 @@ class AssignmentCollection extends JsonResource
     return [
       'id'             => $this->id,
       'date_assigned'  => $this->data_assigned,
+      'date_inspected' => $this->data_inspected,
       'insurer'        => $this->insurer,
       'broker'         => $this->broker,
       'ref_no'         => $this->ref_no,

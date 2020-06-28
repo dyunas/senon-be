@@ -16,6 +16,7 @@ class CreateAssignmentsTable extends Migration
     Schema::create('assignments', function (Blueprint $table) {
       $table->bigIncrements('id');
       $table->date('date_assigned')->nullable();
+      $table->date('date_inspected')->nullable();
       $table->string('insurer', 20)->nullable();
       $table->string('broker', 20)->nullable();
       $table->string('ref_no', 32)->nullable();

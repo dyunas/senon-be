@@ -13,9 +13,9 @@ class AlterReceivingTableAddConstraint extends Migration
    */
   public function up()
   {
-    Schema::table('receivings', function (Blueprint $table) {
-      $table->foreign('assignment_id')->references('id')->on('assignments');
-    });
+    // Schema::table('receivings', function (Blueprint $table) {
+    //   $table->foreign('assignment_id')->references('id')->on('assignments');
+    // });
   }
 
   /**
@@ -25,8 +25,8 @@ class AlterReceivingTableAddConstraint extends Migration
    */
   public function down()
   {
-    Schema::table('receivings', function (Blueprint $table) {
-      $table->dropForeign('assignment_id');
-    });
+    // Schema::table('receivings', function (Blueprint $table) {
+    //   $table->dropForeign('assignment_id');
+    // });
   }
 }
