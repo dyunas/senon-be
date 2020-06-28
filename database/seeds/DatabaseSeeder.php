@@ -24,8 +24,8 @@ class DatabaseSeeder extends Seeder
     $this->command->info('status lists seeding completed!');
 
     // run AssignmentSeeder
-    $this->call(AssignmentSeeder::class);
-    $this->command->info('Assignments seeding completed!');
+    // $this->call(AssignmentSeeder::class);
+    // $this->command->info('Assignments seeding completed!');
 
     // run AdjusterSeeder
     $this->call(AdjusterSeeder::class);
@@ -44,11 +44,11 @@ class DatabaseSeeder extends Seeder
     $this->command->info('Broker seeding completed!');
 
     // run AssignmentChangeLogSeeder
-    $this->call(AssignmentChangeLogSeeder::class);
-    $this->command->info('Assignment change logs seeding completed!');
+    // $this->call(AssignmentChangeLogSeeder::class);
+    // $this->command->info('Assignment change logs seeding completed!');
 
     // run ReportListSeeder
-    $this->call(ReportListSeeder::class);
-    $this->command->info('Reports list seeding completed!');
+    // $this->call(ReportListSeeder::class);
+    // $this->command->info('Reports list seeding completed!');
   }
 }
