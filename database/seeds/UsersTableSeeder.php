@@ -16,8 +16,8 @@ class UsersTableSeeder extends Seeder
     DB::table('users')->delete();
 
     User::create(array(
-      'name'              => 'Jonathan Quebral',
-      'email'             => 'jonathan.quebral0627@gmail.com',
+      'name'              => 'Liza Toledo',
+      'email'             => 'liza@senonadjuster.com',
       'email_verified_at' => now(),
       'password'          => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
       'user_level_id'     => 1

@@ -25,6 +25,7 @@ class StatusListSeeder extends Seeder
       ['status' => 'Awaiting Insurer\'s Approval'],
       ['status' => 'Awaiting Acceptance of Offer'],
       ['status' => 'Awaiting Insured\'s Reaction'],
+      ['status' => 'For Closing'],
       ['status' => 'Closed'],
     ];
 
