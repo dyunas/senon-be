@@ -23,13 +23,13 @@ class CasesPerAdjusterReportsController extends Controller
           SELECT COALESCE(COUNT(b.id), 0) 
           FROM assignments b 
           WHERE b.adjuster = a.adjuster 
-          AND b.status_list_id != 9
+          AND b.status_list_id != 11
         ) as active,
         (
           SELECT COALESCE(COUNT(c.id), 0)
           FROM assignments c
           WHERE c.adjuster = a.adjuster
-          AND c.status_list_id = 9
+          AND c.status_list_id = 11
         ) as completed
       FROM adjusters a
     ');
