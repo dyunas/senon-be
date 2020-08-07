@@ -14,14 +14,15 @@ use Illuminate\Http\Request;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-  return $request->user();
+	return $request->user();
 });
 
 Route::post('/login', 'Auth\LoginController@login');
 Route::post('/register', 'Auth\RegisterController@create');
+Route::post('/user_level', 'API\UserLevelController@index');
 
 Route::middleware('auth:api')->group(function () {
-  Route::post('/logout', 'Auth\LogoutController@logout');
+	Route::post('/logout', 'Auth\LogoutController@logout');
 });
 
 Route::apiResource('adjuster', 'API\AdjusterController');

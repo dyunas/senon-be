@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-  /*
+	/*
     |--------------------------------------------------------------------------
     | Register Controller
     |--------------------------------------------------------------------------
@@ -22,54 +22,53 @@ class RegisterController extends Controller
     |
     */
 
-  use RegistersUsers;
+	use RegistersUsers;
 
-  /**
-   * Where to redirect users after registration.
-   *
-   * @var string
-   */
-  protected $redirectTo = RouteServiceProvider::HOME;
+	/**
+	 * Where to redirect users after registration.
+	 *
+	 * @var string
+	 */
+	protected $redirectTo = RouteServiceProvider::HOME;
 
-  /**
-   * Create a new controller instance.
-   *
-   * @return void
-   */
-  public function __construct()
-  {
-    $this->middleware('guest');
-  }
+	/**
+	 * Create a new controller instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		$this->middleware('guest');
+	}
 
-  /**
-   * Get a validator for an incoming registration request.
-   *
-   * @param  array  $data
-   * @return \Illuminate\Contracts\Validation\Validator
-   */
-  protected function formValidator($request)
-  {
-    return $request->validate([
-      'email'    => 'required|email',
-      'password' => 'required|string',
-      'name'     => 'required|string',
-      'user_level_id' => 'required'
-    ]);
-  }
+	/**
+	 * Get a validator for an incoming registration request.
+	 *
+	 * @param  array  $data
+	 * @return \Illuminate\Contracts\Validation\Validator
+	 */
+	protected function formValidator($request)
+	{
+		return $request->validate([
+			'email'    => 'required|email',
+			'name'     => 'required|string',
+			'user_level_id' => 'required'
+		]);
+	}
 
-  /**
-   * Create a new user instance after a valid registration.
-   *
-   * @param  array  $data
-   * @return \App\User
-   */
-  protected function create(Request $request)
-  {
-    return User::create([
-      'name' => $request->name,
-      'email' => $request->email,
-      'password' => Hash::make($request->password),
-      'user_level_id' => $request->user_level_id
-    ]);
-  }
+	/**
+	 * Create a new user instance after a valid registration.
+	 *
+	 * @param  array  $data
+	 * @return \App\User
+	 */
+	protected function create(Request $request)
+	{
+		return User::create([
+			'name' => $request->name,
+			'email' => $request->email,
+			'password' => Hash::make('senon@1234'),
+			'user_level_id' => $request->user_level_id
+		]);
+	}
 }
