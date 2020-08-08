@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use App\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -52,7 +53,7 @@ class RegisterController extends Controller
 		return $request->validate([
 			'email'    => 'required|email',
 			'name'     => 'required|string',
-			'user_level_id' => 'required'
+			'user_level_id' => 'required|int'
 		]);
 	}
 
@@ -64,6 +65,8 @@ class RegisterController extends Controller
 	 */
 	protected function create(Request $request)
 	{
+		$this->formValidator($request);
+
 		return User::create([
 			'name' => $request->name,
 			'email' => $request->email,
