@@ -19,11 +19,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/login', 'Auth\LoginController@login');
 Route::post('/register', 'Auth\RegisterController@create');
-Route::get('/user_level', 'API\UserLevelController@index');
 
 Route::middleware('auth:api')->group(function () {
 	Route::post('/logout', 'Auth\LogoutController@logout');
 });
+
+Route::apiResource('/users', 'API\UserController');
 
 Route::apiResource('adjuster', 'API\AdjusterController');
 Route::apiResource('assignment', 'API\AssignmentController');
