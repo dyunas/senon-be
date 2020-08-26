@@ -53,8 +53,35 @@ class AssignmentController extends Controller
 		$startRow   = (int) $request->startRow;
 		$fetchCount = (int) $request->fetchCount;
 		$sort    		= $request->sortBy;
+		$filter			= $request->filterBy;
 
-		return AssignmentListCollection::collection(Assignment::where('id', '>', $startRow)->take($fetchCount)->orderBy($sort)->get());
+		if ($filter != 'undefined') {
+			return AssignmentListCollection::collection(
+				Assignment::whereRaw(
+					'id > ' . $startRow . '
+				AND
+				CASE
+					WHEN ref_no LIKE "%' . $filter . '%" THEN 1
+					WHEN claim_num LIKE "%' . $filter . '%" THEN 1
+					WHEN insurer LIKE "%' . $filter . '%" THEN 1
+					WHEN broker LIKE "%' . $filter . '%" THEN 1
+					WHEN adjuster LIKE "%' . $filter . '%" THEN 1
+					WHEN name_insured LIKE "%' . $filter . '%" THEN 1
+					ELSE 0
+				END'
+				)
+					->take($fetchCount)
+					->orderBy($sort)
+					->get()
+			);
+		}
+
+		return AssignmentListCollection::collection(
+			Assignment::where('id', '>', $startRow)
+				->take($fetchCount)
+				->orderBy($sort)
+				->get()
+		);
 	}
 
 	/**
@@ -71,16 +98,16 @@ class AssignmentController extends Controller
 				->selectRaw('COUNT(*) as count')
 				->whereRaw(
 					'(
-				CASE
-					WHEN ref_no LIKE "%' . $filter . '%" THEN 1
-					WHEN claim_num LIKE "%' . $filter . '%" THEN 1
-					WHEN insurer LIKE "%' . $filter . '%" THEN 1
-					WHEN broker LIKE "%' . $filter . '%" THEN 1
-					WHEN adjuster LIKE "%' . $filter . '%" THEN 1
-					WHEN name_insured LIKE "%' . $filter . '%" THEN 1
-					ELSE 0
-				END
-			)'
+						CASE
+							WHEN ref_no LIKE "%' . $filter . '%" THEN 1
+							WHEN claim_num LIKE "%' . $filter . '%" THEN 1
+							WHEN insurer LIKE "%' . $filter . '%" THEN 1
+							WHEN broker LIKE "%' . $filter . '%" THEN 1
+							WHEN adjuster LIKE "%' . $filter . '%" THEN 1
+							WHEN name_insured LIKE "%' . $filter . '%" THEN 1
+							ELSE 0
+						END
+					)'
 				)
 				->get();
 		}

@@ -33,7 +33,7 @@ Route::get('/get_due', function () {
 	if ($count > 0) {
 		$dues = AssignmentDues::collection(Assignment::where('due', 1)->get());
 
-		// return $dues;
-		return new App\Mail\AssignmentDue($dues);
+		return $dues;
+		// return new App\Mail\AssignmentDue($dues);
 	}
 });
