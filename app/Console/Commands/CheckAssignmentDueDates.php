@@ -49,7 +49,7 @@ class CheckAssignmentDueDates extends Command
 			'due' => 1
 		]);
 
-		$emails = array('liza@senonadjuster.com');
+		$emails = array('jonathan.quebral0627@gmail.com', 'liza@senonadjuster.com');
 
 		if ($count > 0) {
 			$dues = AssignmentDues::collection(Assignment::where('due', 1)->get());
