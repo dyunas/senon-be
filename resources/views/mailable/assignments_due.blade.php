@@ -5,10 +5,14 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>Laravel</title>
+		<title>Senon Adjuster</title>
 
 		<!-- Fonts -->
 		<link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
 		<!-- Styles -->
 		<style>
@@ -21,70 +25,45 @@
 				height: 100vh;
 				margin: 0;
 			}
-
-			.full-height {
-				height: 100vh;
-			}
-
-			.flex-center {
-				align-items: center;
-				display: flex;
-				justify-content: center;
-			}
-
-			.flex-center {
-				align-items: left;
-				display: flex;
-				justify-content: center;
-			}
-
-			.position-ref {
-				position: relative;
-			}
-
-			.top-right {
-				position: absolute;
-				right: 10px;
-				top: 18px;
-			}
-
-			.content {
-				text-align: center;
-			}
-
-			.title {
-				font-size: 84px;
-			}
-
-			.links>a {
-				color: #636b6f;
-				padding: 0 25px;
-				font-size: 13px;
-				font-weight: 600;
-				letter-spacing: .1rem;
-				text-decoration: none;
-				text-transform: uppercase;
-			}
-
-			.m-b-md {
-				margin-bottom: 30px;
-			}
-
 		</style>
 	</head>
 
 	<body>
-		<div>
-			<div class="flex-left position-ref">
-				<h2>Hi Liza Marie!</h2>
-			</div>
-	
-			<div class="flex-center position-ref">
-				<p>	You have {{ $count ?? '' }} assignments that are currently over due.
-					<br/>
-					Please visit <a href="http://localhost:8088/#/cms/assignment">http:://localhost:8088/assignment</a> to view the due assignments
-				</p>
-			</div>
+		<div class="container">
+			<h3>Dear Team,</h3>
+			<br/>
+			<p class="lead">Please update status:</p>
+			<br/>
+			<table class="table table-bordered">
+				<tbody>
+					<tr>
+						<td scope="col"><span class="font-weight-bold">Ref. No.:</span></td>
+						<td>{{ $due->ref_no }}</td>
+					</tr>
+					<tr>
+						<td scope="col"><span class="font-weight-bold">Adjuster:</span></td>
+						<td>{{ $due->adjuster }}</td>
+					</tr>
+					<tr>
+						<td scope="col"><span class="font-weight-bold">Insured:</span></td>
+						<td>{{ $due->name_insured }}</td>
+					</tr>
+					<tr>
+						<td scope="col"><span class="font-weight-bold">Status:</span></td>
+						<td>{{ $due->status_list->status }}</td>
+					</tr>
+					<tr>
+						<td scope="col"><span class="font-weight-bold">Due Date:</span></td>
+						<td>{{ $due->due_date }}</td>
+					</tr>
+					<tr>
+						<td scope="col"><span class="font-weight-bold">Last Update:</span></td>
+						<td>{{ $due->updated_at }}</td>
+					</tr>
+				</tbody>
+			</table>
+			<br/>
+			<p class="lead">Thank you.</p>
 		</div>
 	</body>
 

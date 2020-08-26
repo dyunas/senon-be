@@ -11,9 +11,10 @@
 |
 */
 
-use App\Assignment;
 use Carbon\Carbon;
+use App\Assignment;
 use App\ReportList;
+use App\Http\Resources\AssignmentDues;
 
 Route::get('/', function () {
 	return view('welcome');
@@ -23,16 +24,16 @@ Route::get('/get_due', function () {
 	$date = now();
 	$date = Carbon::parse($date);
 
-	$assignment = Assignment::where('due_date', '<=', now())->where('due_date', '!=', null)->update([
+	$count = Assignment::where('due_date', '<=', now())->where('due_date', '!=', null)->update([
 		'due' => 1
 	]);
 
-	return $assignment;
-});
+	$emails = array('jonathan.quebral0627@gmail.com', 'liza@senonadjuster.com');
 
-Route::get('/assignments', function () {
-	$assignments = Assignment::where('due', 0);
-	$dues = Assignment::where('due', 1)->union($assignments)->get();
+	if ($count > 0) {
+		$dues = AssignmentDues::collection(Assignment::where('due', 1)->get());
 
-	return $dues;
+		// return $dues;
+		return new App\Mail\AssignmentDue($dues);
+	}
 });

@@ -12,16 +12,16 @@ class AssignmentDue extends Mailable
 {
 	use Queueable, SerializesModels;
 
-	public $assignment;
+	public $due;
 
 	/**
 	 * Create a new message instance.
 	 *
 	 * @return void
 	 */
-	public function __construct($assignment)
+	public function __construct($due)
 	{
-		$this->assignment = $assignment;
+		$this->due = $due;
 	}
 
 	/**
@@ -31,8 +31,10 @@ class AssignmentDue extends Mailable
 	 */
 	public function build()
 	{
-		return $this->view('mailable.assignments_due')->with([
-			'count' => $this->assignment
-		]);
+		return $this->from('jonathan.quebral0627@gmail.com')
+			->subject('DUE FOR FOLLOW UP: ' . $this->due->adjuster . '/REF. NO.: ' . $this->due->ref_no)
+			->view('mailable.assignments_due')->with([
+				'due'  => $this->due
+			]);
 	}
 }

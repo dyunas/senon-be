@@ -7,6 +7,7 @@ use App\Assignment;
 use App\Mail\AssignmentDue;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Resources\AssignmentDues;
 
 class CheckAssignmentDueDates extends Command
 {
@@ -44,11 +45,19 @@ class CheckAssignmentDueDates extends Command
 		$date = now();
 		$date = Carbon::parse($date);
 
-		$assignment = Assignment::where('due_date', '<=', now())->where('due_date', '!=', null)->update([
+		$count = Assignment::where('due_date', '<=', now())->where('due_date', '!=', null)->update([
 			'due' => 1
 		]);
 
-		if ($assignment > 0) Mail::to('liza@senonadjuter.com')->send(new AssignmentDue($assignment));
+		$emails = array('liza@senonadjuster.com');
+
+		if ($count > 0) {
+			$dues = AssignmentDues::collection(Assignment::where('due', 1)->get());
+
+			foreach ($dues as $due) {
+				Mail::to($emails)->send(new AssignmentDue($due));
+			}
+		}
 
 		dd('checking done');
 	}
