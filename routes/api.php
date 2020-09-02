@@ -38,7 +38,11 @@ Route::apiResource('user_levels', 'API\UserLevelController');
 
 
 Route::get('/assignment/edit/{assignment}', 'API\AssignmentController@edit');
+
 Route::get('/filtered_assignments_count', 'API\AssignmentController@filtered_assignments_count');
+
+Route::get('/generate_report', 'API\GenerateAssignmentReportController@index');
+Route::get('/export_report', 'API\GenerateAssignmentReportController@export');
 
 Route::get('/graphs/cases_per_adjuster', 'API\CasesPerAdjusterReportsController@index');
 
