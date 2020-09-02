@@ -55,7 +55,11 @@ class CheckAssignmentDueDates extends Command
 			$dues = AssignmentDues::collection(Assignment::where('due', 1)->get());
 
 			foreach ($dues as $due) {
-				Mail::to($emails)->send(new AssignmentDue($due));
+				try {
+					Mail::to($emails)->send(new AssignmentDue($due));
+				} catch (\Throwable $th) {
+					continue;
+				}
 			}
 		}
 
