@@ -41,6 +41,7 @@ Route::get('/assignment/edit/{assignment}', 'API\AssignmentController@edit');
 
 Route::get('/filtered_assignments_count', 'API\AssignmentController@filtered_assignments_count');
 
+Route::get('/selection_options', 'API\GenerateAssignmentReportController@selection_options');
 Route::get('/generate_report', 'API\GenerateAssignmentReportController@index');
 Route::get('/export_report', 'API\GenerateAssignmentReportController@export');
 

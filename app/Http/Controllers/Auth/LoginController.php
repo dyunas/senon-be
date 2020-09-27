@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
-  /*
+	/*
     |--------------------------------------------------------------------------
     | Login Controller
     |--------------------------------------------------------------------------
@@ -22,56 +22,58 @@ class LoginController extends Controller
     |
     */
 
-  use AuthenticatesUsers;
+	use AuthenticatesUsers;
 
-  /**
-   * Where to redirect users after login.
-   *
-   * @var string
-   */
-  protected $redirectTo = RouteServiceProvider::HOME;
+	/**
+	 * Where to redirect users after login.
+	 *
+	 * @var string
+	 */
+	protected $redirectTo = RouteServiceProvider::HOME;
 
-  /**
-   * Create a new controller instance.
-   *
-   * @return void
-   */
-  public function __construct()
-  {
-    $this->middleware('guest')->except('logout');
-  }
+	/**
+	 * Create a new controller instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		$this->middleware('guest')->except('logout');
+	}
 
-  protected function formValidator($request)
-  {
-    return $request->validate([
-      'email'    => 'required|email',
-      'password' => 'required|string'
-    ]);
-  }
+	protected function formValidator($request)
+	{
+		return $request->validate([
+			'email'    => 'required|email',
+			'password' => 'required|string'
+		]);
+	}
 
-  protected function generateAccessToken($user)
-  {
-    return $user->createToken($user->email . '-' . now())->accessToken;
-  }
+	protected function generateAccessToken($user)
+	{
+		return $user->createToken($user->email . '-' . now())->accessToken;
+	}
 
-  public function login(Request $request)
-  {
-    $this->formValidator($request);
+	public function login(Request $request)
+	{
+		$this->formValidator($request);
 
-    $user = User::where('email', $request->email)->first();
+		$user = User::where('email', $request->email)->first();
 
-    if (!$user) {
-      return response()->json(["message" => "User does not exist"], 401);
-    }
+		if (!$user) {
+			return response()->json(["message" => "User does not exist"], 401);
+		}
 
-    if (!Hash::check($request->password, $user->password)) {
-      return response()->json(["message" => "Incorrect password"], 401);
-    }
+		if (!Hash::check($request->password, $user->password)) {
+			return response()->json(["message" => "Incorrect password"], 401);
+		}
 
-    $token = $this->generateAccessToken($user);
+		$token = $this->generateAccessToken($user);
 
-    return response()->json([
-      'token' => $token,
-    ]);
-  }
+		return response()->json([
+			'token' => $token,
+			'user'	=> $user->name,
+			'userLevel' => $user->user_level->user_level
+		]);
+	}
 }

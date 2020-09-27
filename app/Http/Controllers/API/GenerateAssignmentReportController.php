@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Broker;
+use App\Insurer;
+use App\Adjuster;
 use Carbon\Carbon;
 use App\Assignment;
 use Illuminate\Http\Request;
@@ -87,6 +90,29 @@ class GenerateAssignmentReportController extends Controller
 		}
 	}
 
+	public function selection_options(Request $request)
+	{
+		$selection = $request->selection;
+
+		switch ($selection) {
+			case 'adjuster':
+				return Adjuster::select('adjuster')->get();
+				break;
+
+			case 'broker':
+				return Broker::select('broker')->get();
+				break;
+
+			case 'insurer':
+				return Insurer::select('insurer')->get();
+				break;
+
+			default:
+				# code...
+				break;
+		}
+	}
+
 	/**
 	 * Export a listing of the resource as .xlsx file.
 	 */
@@ -97,7 +123,7 @@ class GenerateAssignmentReportController extends Controller
 			'value' 			=> $request->value // value depends on selection
 		);
 
-		$filename = $params['value'] . '-' . Carbon::now()->format('Ymd') . '.xlsx';
+		$filename = $params['selection'] . ' - ' . $params['value'] . '-' . Carbon::now()->format('Ymd') . '.xlsx';
 
 		return (new AssignmentsExport($params))->download($filename);
 	}
