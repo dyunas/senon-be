@@ -37,3 +37,14 @@ Route::get('/get_due', function () {
 		// return new App\Mail\AssignmentDue($dues);
 	}
 });
+
+Route::get('/get_last_assignment', function () {
+	$year = date('y');
+	$last = Assignment::whereRaw('ref_no LIKE "%' . $year . '-%"')->orderBy('id', 'DESC')->first();
+	if ($last) {
+		$last_ref_no =	explode('-', $last->ref_no);
+		return $next_ref_no = $last_ref_no[0] . '-' . str_pad(($last_ref_no[1] + 1), 5, '0', STR_PAD_LEFT);
+	}
+
+	return $next_ref_no = date('y') . '-' . str_pad(1, 5, '0', STR_PAD_LEFT);
+});

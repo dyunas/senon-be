@@ -34,7 +34,7 @@ class AssignmentController extends Controller
 			'pol_type'       => 'required|string|max:50',
 			'risk_location'  => 'required|string',
 			'nature_loss'    => 'required|string|max:50',
-			'date_loss'      => 'required|date',
+			'date_loss'      => 'required',
 			'contact_person' => '',
 			'contact_number' => '',
 			'loss_reserve'   => '',
@@ -127,9 +127,14 @@ class AssignmentController extends Controller
 	{
 		$ref_no = '';
 		$year = date('y');
-		$last = $this->get_last_assignment_in_table();
-		$last_ref_no = explode('-', $last->ref_no);
-		$next_ref_no = ($last_ref_no[0] === date('y')) ? $last_ref_no[0] . '-' . str_pad(($last_ref_no[1] + 1), 5, '0', STR_PAD_LEFT) : date('y') . '-' . str_pad(1, 5, '0', STR_PAD_LEFT);
+		$last = Assignment::whereRaw('ref_no LIKE "%' . $year . '-%"')->orderBy('id', 'DESC')->first();
+
+		if ($last) {
+			$last_ref_no =	explode('-', $last->ref_no);
+			$next_ref_no = $last_ref_no[0] . '-' . str_pad(($last_ref_no[1] + 1), 5, '0', STR_PAD_LEFT);
+		} else {
+			$next_ref_no = date('y') . '-' . str_pad(1, 5, '0', STR_PAD_LEFT);
+		}
 
 		$this->formValidator($request);
 
@@ -200,7 +205,7 @@ class AssignmentController extends Controller
 	public function show(Assignment $assignment)
 	{
 		// return $assignment;
-		return new AssignmentCollection($assignment);
+		return AssignmentCollection::collection($assignment);
 	}
 
 	/**
@@ -212,7 +217,7 @@ class AssignmentController extends Controller
 	public function edit(Assignment $assignment)
 	{
 		// data of the assignment to be editted
-		return $assignment;
+		return new AssignmentCollection($assignment);
 	}
 
 	/**
@@ -236,7 +241,7 @@ class AssignmentController extends Controller
 			'data.pol_type'       => 'required|string|max:50',
 			'data.risk_location'  => 'required|string',
 			'data.nature_loss'    => 'required|string|max:50',
-			'data.date_loss'      => 'required|date',
+			'data.date_loss'      => 'required',
 			'data.contact_person' => '',
 			'data.contact_number' => '',
 			'data.loss_reserve'   => '',
@@ -300,7 +305,7 @@ class AssignmentController extends Controller
 
 			DB::commit(); // commit changes into the database tables
 
-			return response()->json(["message" => "Assignment status updated to " . $status->status], 201);
+			return $status->status;
 		} catch (ValidationException $error) {
 			DB::rollback(); // rollback changes when exception is caught
 
