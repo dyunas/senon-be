@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Broker;
-use App\Insurer;
-use App\Adjuster;
 use Carbon\Carbon;
-use App\Assignment;
 use Illuminate\Http\Request;
+use App\Models\Broker;
+use App\Models\Insurer;
+use App\Models\Adjuster;
+use App\Models\Assignment;
 use App\Exports\AssignmentsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\GeneratedAssignmentReportCollection;
@@ -40,7 +40,37 @@ class GenerateAssignmentReportController extends Controller
 	 */
 	public function quarterlyReport($value)
 	{
-		// code here..
+		try {
+			$result = array();
+
+			switch ($value) {
+				case 'first_quarter':
+					//
+					break;
+
+				case 'second_quarter':
+					//
+					break;
+
+				case 'third_quarter':
+					//
+					break;
+
+				case 'fourth_quarter':
+					//
+					break;
+
+				default:
+					break;
+			}
+
+			return json_encode($result);
+		} catch (\Throwable $error) {
+			return response()->json([
+				'message' => 'Something went wrong while generating report. Please try again.',
+				'error'   => $error->getMessage()
+			], 500);
+		}
 	}
 
 	/**

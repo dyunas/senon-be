@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Receiving;
-use App\Assignment;
-use App\StatusList;
-use App\AssignmentChangeLog;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ReceivingsCollection;
-use App\ReportList;
+use App\Models\Receiving;
+use App\Models\Assignment;
+use App\Models\StatusList;
+use App\Models\AssignmentChangeLog;
+use App\Models\ReportList;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
 
@@ -71,7 +71,7 @@ class ReceivingController extends Controller
 			]);
 
 			$due_in_num_days = ReportList::where('id', $request->report_submitted_id)->first()->due_in_num_days;
-			
+
 			$due_date = ($request->report_submitted_id <= 8) ? Carbon::now()->addWeekdays($due_in_num_days) : null;
 
 			if ($request->attachment !== "null") $this->uploadFileAttachment($receiving); // if attachment has value then upload the file attachment

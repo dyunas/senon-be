@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
-use App\UserLevel;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\UserLevel;
+use Illuminate\Http\Request;
 
 class UserLevelController extends Controller
 {

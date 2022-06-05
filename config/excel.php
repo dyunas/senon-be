@@ -25,6 +25,16 @@ return [
 
         /*
         |--------------------------------------------------------------------------
+        | Enable strict null comparison
+        |--------------------------------------------------------------------------
+        |
+        | When enabling strict null comparison empty cells ('') will
+        | be added to the sheet.
+        */
+        'strict_null_comparison' => false,
+
+        /*
+        |--------------------------------------------------------------------------
         | CSV Settings
         |--------------------------------------------------------------------------
         |
@@ -38,6 +48,7 @@ return [
             'use_bom'                => false,
             'include_separator_line' => false,
             'excel_compatibility'    => false,
+            'output_encoding'        => '',
         ],
 
         /*
@@ -78,6 +89,19 @@ return [
 
         /*
         |--------------------------------------------------------------------------
+        | Ignore Empty
+        |--------------------------------------------------------------------------
+        |
+        | When dealing with imports, you might be interested in ignoring
+        | rows that have null values or empty strings. By default rows
+        | containing empty strings or empty values are not ignored but can be
+        | ignored by enabling the setting ignore_empty to true.
+        |
+        */
+        'ignore_empty' => false,
+
+        /*
+        |--------------------------------------------------------------------------
         | Heading Row Formatter
         |--------------------------------------------------------------------------
         |
@@ -98,7 +122,7 @@ return [
         |
         */
         'csv'         => [
-            'delimiter'        => ',',
+            'delimiter'        => null,
             'enclosure'        => '"',
             'escape_character' => '\\',
             'contiguous'       => false,
@@ -253,6 +277,9 @@ return [
     */
     'transactions' => [
         'handler' => 'db',
+        'db'      => [
+            'connection' => null,
+        ],
     ],
 
     'temporary_files' => [
@@ -266,7 +293,7 @@ return [
         | storing reading or downloading. Here you can customize that path.
         |
         */
-        'local_path'          => storage_path('framework/laravel-excel'),
+        'local_path'          => storage_path('framework/cache/laravel-excel'),
 
         /*
         |--------------------------------------------------------------------------

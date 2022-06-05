@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Carbon\Carbon;
-use App\Assignment;
+use App\Models\Assignment;
 use App\Mail\AssignmentDue;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
@@ -49,7 +49,7 @@ class CheckAssignmentDueDates extends Command
 			'due' => 1
 		]);
 
-		$emails = array('jonathan.quebral0627@gmail.com', 'liza@senonadjuster.com');
+		$emails = array('senonadmin@senonadjuster.com', 'liza@senonadjuster.com');
 
 		if ($count > 0) {
 			$dues = AssignmentDues::collection(Assignment::where('due', 1)->get());

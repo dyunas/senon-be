@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+// use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
@@ -22,7 +22,7 @@ class LoginController extends Controller
     |
     */
 
-	use AuthenticatesUsers;
+	// use AuthenticatesUsers;
 
 	/**
 	 * Where to redirect users after login.

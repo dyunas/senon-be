@@ -3,7 +3,7 @@
 namespace App\Exports\Sheets;
 
 use Carbon\Carbon;
-use App\Assignment;
+use App\Models\Assignment;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithTitle;
@@ -36,6 +36,10 @@ class AssignmentsPerCaseSheet implements FromView, ShouldQueue, ShouldAutoSize, 
 
 			case 'insurer':
 				return $this->insurer();
+				break;
+
+			case 'quarterly':
+				return $this->quarterly();
 				break;
 
 			default:
@@ -132,5 +136,91 @@ class AssignmentsPerCaseSheet implements FromView, ShouldQueue, ShouldAutoSize, 
 			'insurer'		=> $this->params['value'],
 			'export_date' => Carbon::now()->format('M d, Y')
 		]);
+	}
+
+	public function quarterly()
+	{
+		$currentYear = \Carbon\Carbon::now()->format('Y');
+		$Q1start = \Carbon\Carbon::createMidnightDate($currentYear, 1, 1);
+		$Q1end = \Carbon\Carbon::createMidnightDate($currentYear, 3, 31);
+
+		$Q2start = \Carbon\Carbon::createMidnightDate($currentYear, 4, 1);
+		$Q2end = \Carbon\Carbon::createMidnightDate($currentYear, 6, 30);
+
+		$Q3start = \Carbon\Carbon::createMidnightDate($currentYear, 7, 1);
+		$Q3end = \Carbon\Carbon::createMidnightDate($currentYear, 9, 30);
+
+		$Q4start = \Carbon\Carbon::createMidnightDate($currentYear, 10, 1);
+		$Q4end = \Carbon\Carbon::createMidnightDate($currentYear, 12, 31);
+
+		switch ($this->params['value']) {
+			case 'first_quarter':
+				if ($this->case == 1) {
+					return view('exports.quarterly', [
+						'assignments' => Assignment::whereRaw('date_assigned BETWEEN "' . $Q1start . '" AND "' . $Q1end . '"')->where('status_list_id', '<', 11)->get(),
+						'quarter'		  => 'First Quarter',
+						'export_date' => $Q1start->format('Y-m-d') . ' - ' . $Q1end->format('Y-m-d')
+					]);
+				}
+
+				return view('exports.quarterly', [
+					'assignments' => Assignment::whereRaw('date_assigned BETWEEN "' . $Q1start . '" AND "' . $Q1end . '"')->where('status_list_id', '=', 11)->get(),
+					'quarter'		  => 'First Quarter',
+					'export_date' => $Q1start->format('Y-m-d') . ' - ' . $Q1end->format('Y-m-d')
+				]);
+				break;
+
+			case 'second_quarter':
+				if ($this->case == 1) {
+					return view('exports.quarterly', [
+						'assignments' => Assignment::whereRaw('date_assigned BETWEEN "' . $Q2start . '" AND "' . $Q2end . '"')->where('status_list_id', '<', 11)->get(),
+						'quarter'		  => 'Second Quarter',
+						'export_date' => $Q2start->format('Y-m-d') . ' - ' . $Q2end->format('Y-m-d')
+					]);
+				}
+
+				return view('exports.quarterly', [
+					'assignments' => Assignment::whereRaw('date_assigned BETWEEN "' . $Q2start . '" AND "' . $Q2end . '"')->where('status_list_id', '=', 11)->get(),
+					'quarter'		  => 'Second Quarter',
+					'export_date' => $Q2start->format('Y-m-d') . ' - ' . $Q2end->format('Y-m-d')
+				]);
+				break;
+
+			case 'third_quarter':
+				if ($this->case == 1) {
+					return view('exports.quarterly', [
+						'assignments' => Assignment::whereRaw('date_assigned BETWEEN "' . $Q3start . '" AND "' . $Q3end . '"')->where('status_list_id', '<', 11)->get(),
+						'quarter'		  => 'Third Quarter',
+						'export_date' => $Q3start->format('Y-m-d') . ' - ' . $Q3end->format('Y-m-d')
+					]);
+				}
+
+				return view('exports.quarterly', [
+					'assignments' => Assignment::whereRaw('date_assigned BETWEEN "' . $Q3start . '" AND "' . $Q3end . '"')->where('status_list_id', '=', 11)->get(),
+					'quarter'		  => 'Third Quarter',
+					'export_date' => $Q3start->format('Y-m-d') . ' - ' . $Q3end->format('Y-m-d')
+				]);
+				break;
+
+			case 'fourth_quarter':
+
+				if ($this->case == 1) {
+					return view('exports.quarterly', [
+						'assignments' => Assignment::whereRaw('date_assigned BETWEEN "' . $Q4start . '" AND "' . $Q4end . '"')->where('status_list_id', '<', 11)->get(),
+						'quarter'		  => 'Fourth Quarter',
+						'export_date' => $Q4start->format('Y-m-d') . ' - ' . $Q4end->format('Y-m-d')
+					]);
+				}
+
+				return view('exports.quarterly', [
+					'assignments' => Assignment::whereRaw('date_assigned BETWEEN "' . $Q4start . '" AND "' . $Q4end . '"')->where('status_list_id', '=', 11)->get(),
+					'quarter'		  => 'Fourth Quarter',
+					'export_date' => $Q4start->format('Y-m-d') . ' - ' . $Q4end->format('Y-m-d')
+				]);
+				break;
+
+			default:
+				break;
+		}
 	}
 }
