@@ -31,7 +31,7 @@ class AssignmentDue extends Mailable
 	 */
 	public function build()
 	{
-		return $this->from('jonathan.quebral0627@gmail.com')
+		return $this->from('liza@senonadjuster.com')
 			->subject('DUE FOR FOLLOW UP: ' . $this->due->adjuster . '/REF. NO.: ' . $this->due->ref_no)
 			->view('mailable.assignments_due')->with([
 				'due'  => $this->due

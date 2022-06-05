@@ -20,8 +20,8 @@ class UserListCollection extends JsonResource
 			'name'					=> $this->name,
 			'email'				  => $this->email,
 			'user_level'    => $this->user_level->user_level,
-			'created_at'     => Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at),
-			'updated_at'     => Carbon::createFromFormat('Y-m-d H:i:s', $this->updated_at)
+			'created_at'    => Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at),
+			'updated_at'    => Carbon::createFromFormat('Y-m-d H:i:s', $this->updated_at)
 		];
 	}
 }

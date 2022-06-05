@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Assignment;
-use App\StatusList;
-use App\AssignmentChangeLog;
+use App\Models\Assignment;
+use App\Models\StatusList;
+use App\Models\AssignmentChangeLog;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -24,21 +24,27 @@ class AssignmentController extends Controller
 	{
 		return $request->validate([
 			'claim_num'      => '',
-			'insurer'        => 'required|string|max:20',
-			'broker'         => 'required|string|max:20',
+			'insurer'        => 'required|string',
+			'broker'         => '',
 			'ref_no'         => '',
-			'name_insured'   => 'required|string|max:255',
-			'adjuster'       => 'required|string|max:50',
+			'name_insured'   => 'required|string',
+			'adjuster'       => 'required|string',
 			'third_party'    => '',
 			'pol_no'         => '',
-			'pol_type'       => 'required|string|max:50',
+			'pol_type'       => 'required|string',
 			'risk_location'  => 'required|string',
-			'nature_loss'    => 'required|string|max:50',
+			'nature_loss'    => 'required|string',
 			'date_loss'      => 'required',
 			'contact_person' => '',
 			'contact_number' => '',
 			'loss_reserve'   => '',
 			'status_list_id' => 'required|numeric',
+			'status_of_adjustment' => '',
+			'risk' 					 => '',
+			'value_of_risk'  => '',
+			'amount_of_insurance' => '',
+			'recommended_payable' => '',
+			'date_of_adjustment'   => '',
 			'remarks'        => 'string|nullable',
 		]);
 	}
@@ -62,16 +68,19 @@ class AssignmentController extends Controller
 				AND
 				CASE
 					WHEN ref_no LIKE "%' . $filter . '%" THEN 1
-					WHEN claim_num LIKE "%' . $filter . '%" THEN 1
 					WHEN insurer LIKE "%' . $filter . '%" THEN 1
 					WHEN broker LIKE "%' . $filter . '%" THEN 1
 					WHEN adjuster LIKE "%' . $filter . '%" THEN 1
 					WHEN name_insured LIKE "%' . $filter . '%" THEN 1
+					WHEN nature_loss LIKE "%' . $filter . '%" THEN 1
+					WHEN date_loss LIKE "%' . $filter . '%" THEN 1
+					WHEN contact_person LIKE "%' . $filter . '%" THEN 1
+					WHEN contact_number LIKE "%' . $filter . '%" THEN 1
 					ELSE 0
 				END'
 				)
 					->take($fetchCount)
-					->orderBy($sort)
+					->orderBy($sort, 'DESC')
 					->get()
 			);
 		}
@@ -79,7 +88,7 @@ class AssignmentController extends Controller
 		return AssignmentListCollection::collection(
 			Assignment::where('id', '>', $startRow)
 				->take($fetchCount)
-				->orderBy($sort)
+				->orderBy($sort, 'DESC')
 				->get()
 		);
 	}
@@ -100,7 +109,7 @@ class AssignmentController extends Controller
 					'(
 						CASE
 							WHEN ref_no LIKE "%' . $filter . '%" THEN 1
-							WHEN claim_num LIKE "%' . $filter . '%" THEN 1
+							WHEN claim_no LIKE "%' . $filter . '%" THEN 1
 							WHEN insurer LIKE "%' . $filter . '%" THEN 1
 							WHEN broker LIKE "%' . $filter . '%" THEN 1
 							WHEN adjuster LIKE "%' . $filter . '%" THEN 1
@@ -147,7 +156,7 @@ class AssignmentController extends Controller
 				'insurer'        => $request->insurer,
 				'broker'         => $request->broker,
 				'ref_no'         => $next_ref_no,
-				'claim_num'      => $request->claim_num,
+				'claim_no'       => $request->claim_no,
 				'name_insured'   => $request->name_insured,
 				'adjuster'       => $request->adjuster,
 				'third_party'    => $request->third_party,
@@ -160,6 +169,12 @@ class AssignmentController extends Controller
 				'contact_number' => $request->contact_number,
 				'loss_reserve'   => $request->loss_reserve,
 				'status_list_id' => 1,
+				'status_of_adjustment' => $request->status_of_adjustment,
+				'risk' 					 => $request->risk,
+				'value_of_risk'  => $request->value_of_risk,
+				'amount_of_insurance' => $request->amount_of_insurance,
+				'recommended_payable' => $request->recommended_payable,
+				'date_of_adjustment'   => $request->date_of_adjustment,
 				'remarks'        => $request->remarks,
 				'created_by'     => $request->created_by,
 			]);
@@ -230,22 +245,27 @@ class AssignmentController extends Controller
 	public function update(Request $request, Assignment $assignment)
 	{
 		$request->validate([
-			'data.insurer'        => 'required|string|max:20',
-			'data.broker'         => 'required|string|max:20',
+			'data.insurer'        => 'required|string',
+			'data.broker'         => 'required|string',
 			'data.ref_no'         => '',
-			'data.claim_num'      => '',
-			'data.name_insured'   => 'required|string|max:255',
-			'data.adjuster'       => 'required|string|max:50',
+			'data.claim_no'      => '',
+			'data.name_insured'   => 'required|string',
+			'data.adjuster'       => 'required|string',
 			'data.third_party'    => '',
 			'data.pol_no'         => '',
-			'data.pol_type'       => 'required|string|max:50',
+			'data.pol_type'       => 'required|string',
 			'data.risk_location'  => 'required|string',
-			'data.nature_loss'    => 'required|string|max:50',
+			'data.nature_loss'    => 'required|string',
 			'data.date_loss'      => 'required',
 			'data.contact_person' => '',
 			'data.contact_number' => '',
 			'data.loss_reserve'   => '',
-			'data.status_list_id' => 'required|numeric',
+			'data.status_of_adjustment' => '',
+			'data.risk' 					 => '',
+			'data.value_of_risk'  => '',
+			'data.amount_of_insurance' => '',
+			'data.recommended_payable' => '',
+			'data.date_of_adjustment'   => '',
 			'data.remarks'        => 'string|nullable',
 		]);
 
@@ -255,7 +275,7 @@ class AssignmentController extends Controller
 				'insurer'        => $request->data['insurer'],
 				'broker'         => $request->data['broker'],
 				'ref_no'         => $request->data['ref_no'],
-				'claim_num'      => $request->data['claim_num'],
+				'claim_no'      => $request->data['claim_no'],
 				'name_insured'   => $request->data['name_insured'],
 				'adjuster'       => $request->data['adjuster'],
 				'third_party'    => $request->data['third_party'],
@@ -267,7 +287,12 @@ class AssignmentController extends Controller
 				'contact_person' => $request->data['contact_person'],
 				'contact_number' => $request->data['contact_number'],
 				'loss_reserve'   => $request->data['loss_reserve'],
-				'status_list_id' => $request->data['status_list_id'],
+				'status_of_adjustment' => $request->data['status_of_adjustment'],
+				'risk' 					 => $request->data['risk'],
+				'value_of_risk'  => $request->data['value_of_risk'],
+				'amount_of_insurance' => $request->data['amount_of_insurance'],
+				'recommended_payable' => $request->data['recommended_payable'],
+				'date_of_adjustment'  => $request->data['date_of_adjustment'],
 				'remarks'        => $request->data['remarks'],
 				'updated_by'     => $request->data['updated_by'],
 			]);

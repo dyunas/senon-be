@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
 use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
+// use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -23,7 +23,7 @@ class RegisterController extends Controller
     |
     */
 
-	use RegistersUsers;
+	// use RegistersUsers;
 
 	/**
 	 * Where to redirect users after registration.
@@ -50,11 +50,18 @@ class RegisterController extends Controller
 	 */
 	protected function formValidator($request)
 	{
-		return $request->validate([
-			'email'    => 'required|email',
-			'name'     => 'required|string',
-			'user_level_id' => 'required|int'
-		]);
+		return Validator::make(
+			$request->only(
+				'email',
+				'name',
+				'user_level_id'
+			),
+			[
+				'email' => 'required|email',
+				'name'  => 'required|string',
+				'user_level_id' => 'required|int'
+			]
+		);
 	}
 
 	/**
